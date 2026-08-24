@@ -1,9 +1,9 @@
 ---
-const { label } = Astro.props;
+const { label, eventDate } = Astro.props as { label: string; eventDate: string };
 ---
 
-<div class="countdown" aria-label={label}>
-  <span><strong>27</strong><small>days</small></span>
-  <span><strong>08</strong><small>hours</small></span>
-  <span><strong>42</strong><small>minutes</small></span>
+<div class="countdown" aria-label={label} data-countdown={eventDate}>
+  <span><strong data-countdown-days>—</strong><small>days</small></span>
+  <span><strong data-countdown-hours>—</strong><small>hours</small></span>
+  <span><strong data-countdown-minutes>—</strong><small>minutes</small></span>
 </div>

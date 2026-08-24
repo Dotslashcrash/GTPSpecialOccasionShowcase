@@ -4,7 +4,7 @@
   if (!root || !dataNode) return;
 
   const original = JSON.parse(dataNode.textContent || '{}');
-  const storageKey = `gtp-occasion-demo:${original.slug}:v1`;
+  const storageKey = `gtp-occasion-demo:${original.slug}:v2`;
   const clone = (value) => JSON.parse(JSON.stringify(value));
   let state = clone(original);
 
@@ -14,6 +14,17 @@
   } catch {
     // The preview remains functional when browser storage is unavailable.
   }
+  state.gallery = state.gallery.map((item, index) =>
+    typeof item === 'string'
+      ? {
+          src: item,
+          alt: `Gallery image ${index + 1}`,
+          caption: `Gallery image ${index + 1}`,
+          visible: true,
+          cover: index === 0,
+        }
+      : item,
+  );
 
   const $ = (selector, scope = root) => scope.querySelector(selector);
   const $$ = (selector, scope = root) => [...scope.querySelectorAll(selector)];
@@ -26,7 +37,7 @@
     window.setTimeout(() => indicator.classList.remove('saved'), 1400);
   }
 
-  function persist(message = 'Saved to this demo') {
+  function persist(message = 'Saved to this browser-only preview.') {
     try {
       localStorage.setItem(storageKey, JSON.stringify(state));
     } catch {
@@ -50,7 +61,10 @@
     const gallery = $('[data-gallery-count]');
     const pending = $('[data-pending-count]');
     if (visible) visible.textContent = state.modules.filter((item) => item.visible).length;
-    if (gallery) gallery.textContent = state.gallery.length;
+    if (gallery) {
+      const visibleImages = state.gallery.filter((item) => item.visible).length;
+      gallery.textContent = `${visibleImages} visible / ${state.gallery.length} total`;
+    }
     if (pending)
       pending.textContent = state.messages.filter((item) => item.status === 'Pending').length;
   }
@@ -239,16 +253,62 @@
     const list = $('[data-gallery-list]');
     if (!list) return;
     list.replaceChildren(
-      ...state.gallery.map((src, index) => {
+      ...state.gallery.map((item, index) => {
         const figure = document.createElement('figure');
+        figure.classList.toggle('gallery-hidden', !item.visible);
+        figure.classList.toggle('gallery-cover', item.cover);
         const image = document.createElement('img');
-        image.src = src;
-        image.alt = `Local gallery preview ${index + 1}`;
+        image.src = item.src;
+        image.alt = item.alt;
         const caption = document.createElement('figcaption');
-        caption.innerHTML = `<span>Preview ${index + 1}</span><button type="button">Remove</button>`;
-        $('button', caption).addEventListener('click', () => {
+        caption.innerHTML = `<form><strong></strong><label>Caption<input name="caption" maxlength="120" required></label><label>Alt text<input name="alt" maxlength="160" required></label><div class="gallery-item-actions"><button type="button" data-cover>Use as cover</button><button type="button" data-visibility></button><button type="button" data-up aria-label="Move image up">↑</button><button type="button" data-down aria-label="Move image down">↓</button><button type="button" class="danger" data-remove>Remove</button><button type="submit">Save details</button></div></form>`;
+        $('strong', caption).textContent = item.cover
+          ? `Image ${index + 1} · Cover image`
+          : `Image ${index + 1}`;
+        $('[name="caption"]', caption).value = item.caption;
+        $('[name="alt"]', caption).value = item.alt;
+        $('[data-cover]', caption).disabled = item.cover;
+        $('[data-visibility]', caption).textContent = item.visible ? 'Hide image' : 'Show image';
+        $('[data-up]', caption).disabled = index === 0;
+        $('[data-down]', caption).disabled = index === state.gallery.length - 1;
+        $('form', caption).addEventListener('submit', (event) => {
+          event.preventDefault();
+          const values = new FormData(event.currentTarget);
+          item.caption = String(values.get('caption'));
+          item.alt = String(values.get('alt'));
+          persist();
+          renderGallery();
+        });
+        $('[data-cover]', caption).addEventListener('click', () => {
+          state.gallery.forEach((galleryItem) => {
+            galleryItem.cover = false;
+          });
+          item.cover = true;
+          persist('Cover image updated in this browser-only preview.');
+          renderGallery();
+        });
+        $('[data-visibility]', caption).addEventListener('click', () => {
+          item.visible = !item.visible;
+          persist(`Image ${item.visible ? 'shown' : 'hidden'} in this browser-only preview.`);
+          renderGallery();
+        });
+        const moveGalleryImage = (direction) => {
+          const target = index + direction;
+          if (target < 0 || target >= state.gallery.length) return;
+          [state.gallery[index], state.gallery[target]] = [
+            state.gallery[target],
+            state.gallery[index],
+          ];
+          persist('Gallery order saved to this browser-only preview.');
+          renderGallery();
+        };
+        $('[data-up]', caption).addEventListener('click', () => moveGalleryImage(-1));
+        $('[data-down]', caption).addEventListener('click', () => moveGalleryImage(1));
+        $('[data-remove]', caption).addEventListener('click', () => {
+          const wasCover = item.cover;
           state.gallery.splice(index, 1);
-          persist('Gallery preview removed');
+          if (wasCover && state.gallery[0]) state.gallery[0].cover = true;
+          persist('Gallery image removed from this browser-only preview.');
           renderGallery();
         });
         figure.append(image, caption);
@@ -270,8 +330,14 @@
     }
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      state.gallery.push(String(reader.result));
-      persist('Local image preview added');
+      state.gallery.push({
+        src: String(reader.result),
+        alt: file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' '),
+        caption: 'New local preview image',
+        visible: true,
+        cover: state.gallery.length === 0,
+      });
+      persist('Local image added to this browser-only preview.');
       renderGallery();
       event.target.value = '';
     });

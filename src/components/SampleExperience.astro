@@ -1,11 +1,48 @@
 ---
-import type { Occasion } from '../content/occasions';
+import { occasions, type Occasion } from '../content/occasions';
+import { site } from '../content/site';
 import Countdown from './Countdown.astro';
 import ShareButton from './ShareButton.astro';
 
 const { occasion } = Astro.props as { occasion: Occasion };
-const isQuiet = ['memorials', 'funerals'].includes(occasion.slug);
-const hasCountdown = !['memorials', 'funerals', 'retirements'].includes(occasion.slug);
+const hasCountdown = Boolean(occasion.eventDate);
+const responseCopy = {
+  rsvp: {
+    title: 'RSVP demonstration',
+    label: 'Sample response',
+    options: ['Joyfully attending', 'Unable to attend, but sending warm wishes'],
+  },
+  tribute: {
+    title: 'Contribute to the family archive',
+    label: 'Sample contribution',
+    options: [
+      'Share a family-approved memory',
+      'Contribute a photograph',
+      'Leave a tribute for moderation',
+    ],
+  },
+  condolence: {
+    title: 'Attendance and condolences',
+    label: 'Sample response',
+    options: [
+      'Planning to attend',
+      'Unable to attend, but sending condolences',
+      'Leave a condolence for family review',
+    ],
+  },
+  reveal: {
+    title: 'Send a little appreciation',
+    label: 'Sample reaction',
+    options: ['This made me smile', 'Leave a personal message', 'Save this letter for later'],
+  },
+  announcement: {
+    title: 'Celebrate the news',
+    label: 'Sample reaction',
+    options: ['Celebrate the news', 'Leave a message', 'Request future updates'],
+  },
+}[occasion.interaction];
+const currentIndex = occasions.findIndex((item) => item.slug === occasion.slug);
+const nextOccasion = occasions[(currentIndex + 1) % occasions.length] ?? occasions[0]!;
 ---
 
 <div
@@ -76,7 +113,10 @@ const hasCountdown = !['memorials', 'funerals', 'retirements'].includes(occasion
           <>
             <p>{occasion.dateLabel}</p>
             <strong>{occasion.dateValue}</strong>
-            <Countdown label={`Sample countdown for ${occasion.sampleName}`} />
+            <Countdown
+              label={`Sample countdown for ${occasion.sampleName}`}
+              eventDate={occasion.eventDate!}
+            />
           </>
         </section>
       )
@@ -178,6 +218,65 @@ const hasCountdown = !['memorials', 'funerals', 'retirements'].includes(occasion
       }
     </section>
 
+    <section
+      class={`sample-gallery gallery-${occasion.galleryStyle}`}
+      aria-labelledby="gallery-title"
+      data-public-gallery
+    >
+      <div class="gallery-heading">
+        <p>{occasion.category} gallery</p>
+        <h2 id="gallery-title">Photographs that give the story texture.</h2>
+        <p>
+          Select any image for a closer look. Every photograph is licensed stock imagery used only
+          for this fictional portfolio sample.
+        </p>
+      </div>
+      <div class="gallery-grid">
+        {
+          occasion.gallery.map((image, index) => (
+            <figure>
+              <button
+                type="button"
+                data-gallery-open={index}
+                aria-label={`Open image ${index + 1} of ${occasion.gallery.length}: ${image.caption}`}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </button>
+              <figcaption>{image.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <dialog class="gallery-lightbox" data-gallery-dialog aria-labelledby="lightbox-caption">
+        <div class="lightbox-shell">
+          <button
+            type="button"
+            class="lightbox-close"
+            data-gallery-close
+            aria-label="Close image viewer">×</button
+          >
+          <button type="button" class="lightbox-prev" data-gallery-prev aria-label="Previous image"
+            >←</button
+          >
+          <figure data-gallery-swipe>
+            <img data-gallery-image src="" alt="" width="1400" height="1050" />
+            <figcaption id="lightbox-caption" data-gallery-caption></figcaption>
+          </figure>
+          <button type="button" class="lightbox-next" data-gallery-next aria-label="Next image"
+            >→</button
+          >
+          <p data-gallery-position aria-live="polite"></p>
+        </div>
+      </dialog>
+    </section>
+
     <section class="sample-details" id="details" aria-labelledby="details-title">
       <div class="details-heading">
         <p>{occasion.dateLabel}</p><h2 id="details-title">{occasion.dateValue}</h2>
@@ -194,26 +293,17 @@ const hasCountdown = !['memorials', 'funerals', 'retirements'].includes(occasion
           ))
         }
       </dl>
-      {
-        !isQuiet && (
-          <form class="rsvp-demo" data-rsvp-demo>
-            <>
-              <h3>RSVP demonstration</h3>
-              <p>No information leaves this browser.</p>
-              <label for={`rsvp-${occasion.slug}`}>Sample response</label>
-              <select id={`rsvp-${occasion.slug}`}>
-                <>
-                  <option>Choose a response</option>
-                  <option>Joyfully attending</option>
-                  <option>Sending warm wishes</option>
-                </>
-              </select>
-              <button type="submit">Save sample response</button>
-              <p class="rsvp-status" aria-live="polite" />
-            </>
-          </form>
-        )
-      }
+      <form class="rsvp-demo" data-rsvp-demo>
+        <h3>{responseCopy.title}</h3>
+        <p>No information leaves this browser.</p>
+        <label for={`rsvp-${occasion.slug}`}>{responseCopy.label}</label>
+        <select id={`rsvp-${occasion.slug}`}>
+          <option>Choose a response</option>
+          {responseCopy.options.map((option) => <option>{option}</option>)}
+        </select>
+        <button type="submit">Save sample response</button>
+        <p class="rsvp-status" aria-live="polite"></p>
+      </form>
     </section>
 
     <section class="sample-messages" aria-labelledby="messages-title">
@@ -246,11 +336,30 @@ const hasCountdown = !['memorials', 'funerals', 'retirements'].includes(occasion
                 <span>{resource.kind}</span>
                 <strong>{resource.label}</strong>
                 <small>{resource.value}</small>
+                <button
+                  type="button"
+                  data-demo-resource
+                  data-resource-kind={resource.kind}
+                  data-resource-label={resource.label}
+                >
+                  Preview {resource.kind.toLowerCase()} information
+                </button>
               </>
             </li>
           ))
         }
       </ul>
+      <dialog class="resource-dialog" data-resource-dialog aria-labelledby="resource-dialog-title">
+        <div>
+          <p>Fictional demonstration</p>
+          <h3 id="resource-dialog-title" data-resource-dialog-title>Preview customer link</h3>
+          <p data-resource-dialog-copy>
+            This control demonstrates where a customer-approved destination would open on a finished
+            site. It does not contact an outside organization.
+          </p>
+          <button type="button" data-resource-dialog-close>Close preview</button>
+        </div>
+      </dialog>
     </section>
 
     <section class="sample-share">
@@ -262,8 +371,11 @@ const hasCountdown = !['memorials', 'funerals', 'retirements'].includes(occasion
     </section>
   </main>
   <footer class="sample-footer">
-    <p>This is a fictional portfolio example created by Griffin Technology Partners.</p><a href="/"
-      >Explore every occasion</a
-    >
+    <p>This is a fictional portfolio example created by Griffin Technology Partners.</p>
+    <nav aria-label="Continue exploring">
+      <a href={`/samples/${nextOccasion.slug}`}>Explore another occasion</a>
+      <a href={`/samples/${occasion.slug}/admin-preview`}>Preview the client portal</a>
+      <a href={`${site.offerUrl}?occasion=${occasion.slug}`}>Start your site with GTP</a>
+    </nav>
   </footer>
 </div>

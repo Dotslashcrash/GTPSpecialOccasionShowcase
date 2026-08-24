@@ -23,7 +23,7 @@ test('all internal links resolve and approved external destinations are used', a
         href.startsWith('https://buy.stripe.com/'),
     ),
   ).toBe(true);
-  expect(external.filter((href) => href.startsWith('https://buy.stripe.com/'))).toHaveLength(3);
+  expect(external.filter((href) => href.startsWith('https://buy.stripe.com/'))).toHaveLength(0);
 });
 
 test('forms in public samples do not transmit data', async ({ page }) => {

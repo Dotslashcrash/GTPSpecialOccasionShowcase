@@ -1,7 +1,7 @@
 export const site = {
   name: 'GTP Special Occasion Websites',
   company: 'Griffin Technology Partners',
-  baseUrl: 'https://zealous-flower-0d3d54610.7.azurestaticapps.net',
+  baseUrl: 'https://occasions.griffintechnologypartners.com',
   offerUrl: 'https://www.griffintechnologypartners.com/web-services/special-occasion-sites',
   salesEmail: 'sales@griffintechnologypartners.com',
   hero: 'Give the moment its own place online.',

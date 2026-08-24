@@ -17,6 +17,15 @@ export type OccasionSlug = (typeof occasionSlugs)[number];
 
 export type Detail = { label: string; value: string };
 export type StorySection = { eyebrow: string; title: string; body: string; items?: string[] };
+export type GalleryImage = {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+  visible: boolean;
+  cover: boolean;
+};
 
 export type Occasion = {
   slug: OccasionSlug;
@@ -45,9 +54,15 @@ export type Occasion = {
   }[];
   resources: { label: string; value: string; kind: string }[];
   portalModules: string[];
+  eventDate: string | null;
+  interaction: 'rsvp' | 'tribute' | 'condolence' | 'reveal' | 'announcement';
+  galleryStyle: string;
+  gallery: GalleryImage[];
 };
 
-export const occasions: Occasion[] = [
+type BaseOccasion = Omit<Occasion, 'eventDate' | 'interaction' | 'galleryStyle' | 'gallery'>;
+
+const baseOccasions: BaseOccasion[] = [
   {
     slug: 'birthdays',
     category: 'Birthday',
@@ -118,7 +133,7 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'Maya’s wish list', value: 'https://example.com/maya-wishes', kind: 'Wishlist' },
+      { label: 'Maya’s wish list', value: 'Demonstration wishlist preview', kind: 'Wishlist' },
       { label: 'RSVP form', value: 'Local demonstration', kind: 'RSVP' },
     ],
     portalModules: [
@@ -197,7 +212,7 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'Lodging guide', value: 'https://example.com/alder-lodging', kind: 'Travel' },
+      { label: 'Lodging guide', value: 'Demonstration lodging preview', kind: 'Travel' },
       { label: 'Gift exchange notes', value: 'Handmade, found, or under $25', kind: 'Exchange' },
     ],
     portalModules: [
@@ -270,8 +285,8 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'Registry', value: 'https://example.com/elena-marcus', kind: 'Registry' },
-      { label: 'Hotel block', value: 'https://example.com/port-rowan-stay', kind: 'Travel' },
+      { label: 'Registry', value: 'Demonstration registry preview', kind: 'Registry' },
+      { label: 'Hotel block', value: 'Demonstration lodging preview', kind: 'Travel' },
     ],
     portalModules: [
       'RSVPs',
@@ -352,7 +367,7 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'Reading-room fund', value: 'https://example.com/reading-room', kind: 'Donation' },
+      { label: 'Reading-room fund', value: 'Demonstration donation preview', kind: 'Donation' },
       { label: 'Family values', value: 'Curiosity · patience · kindness', kind: 'Legacy' },
     ],
     portalModules: [
@@ -511,8 +526,8 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'College fund', value: 'https://example.com/jordan-future', kind: 'Gift' },
-      { label: 'Ceremony livestream', value: 'https://example.com/westbridge-live', kind: 'Video' },
+      { label: 'College fund', value: 'Demonstration gift preview', kind: 'Gift' },
+      { label: 'Ceremony livestream', value: 'Demonstration livestream notice', kind: 'Video' },
     ],
     portalModules: [
       'Graduate profile',
@@ -589,7 +604,7 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'Mentorship fund', value: 'https://example.com/amir-mentorship', kind: 'Donation' },
+      { label: 'Mentorship fund', value: 'Demonstration donation preview', kind: 'Donation' },
       { label: 'Event RSVP', value: '58 attending · 6 awaiting reply', kind: 'RSVP' },
     ],
     portalModules: [
@@ -667,7 +682,7 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'Lodge rooms', value: 'https://example.com/alder-lodge', kind: 'Lodging' },
+      { label: 'Lodge rooms', value: 'Demonstration lodging preview', kind: 'Lodging' },
       { label: 'Travel board', value: 'Three ride shares available', kind: 'Travel' },
     ],
     portalModules: [
@@ -824,7 +839,7 @@ export const occasions: Occasion[] = [
         value: 'Available 30 minutes before service',
         kind: 'Livestream',
       },
-      { label: 'Harbor Tool Library', value: 'https://example.com/tool-library', kind: 'Donation' },
+      { label: 'Harbor Tool Library', value: 'Demonstration donation preview', kind: 'Donation' },
       {
         label: 'Printable service details',
         value: 'Use your browser print command',
@@ -992,7 +1007,7 @@ export const occasions: Occasion[] = [
       },
     ],
     resources: [
-      { label: 'Registry', value: 'https://example.com/baby-parker', kind: 'Registry' },
+      { label: 'Registry', value: 'Demonstration registry preview', kind: 'Registry' },
       { label: 'Directions', value: 'Accessible entrance on Willow Lane', kind: 'Travel' },
     ],
     portalModules: [
@@ -1008,6 +1023,215 @@ export const occasions: Occasion[] = [
     ],
   },
 ];
+
+type OccasionEnhancement = {
+  dateValue: string;
+  eventDate: string | null;
+  interaction: Occasion['interaction'];
+  galleryStyle: string;
+  galleryCaptions: [string, string, string, string, string, string];
+};
+
+const occasionEnhancements: Record<OccasionSlug, OccasionEnhancement> = {
+  birthdays: {
+    dateValue: 'September 19, 2027 · 6:30 PM',
+    eventDate: '2027-09-19T18:30:00-05:00',
+    interaction: 'rsvp',
+    galleryStyle: 'scrapbook',
+    galleryCaptions: [
+      'The guest of honor',
+      'A cake made for forty wishes',
+      'Bright tables before guests arrive',
+      'A favorite candlelit detail',
+      'Friends gathering for the surprise',
+      'One more joyful chapter',
+    ],
+  },
+  holidays: {
+    dateValue: 'December 18–20, 2027',
+    eventDate: '2027-12-18T16:00:00-06:00',
+    interaction: 'rsvp',
+    galleryStyle: 'homecoming',
+    galleryCaptions: [
+      'Home for the holidays',
+      'Traditions waiting on the table',
+      'The first lights of the season',
+      'Recipes made together',
+      'Small gifts, carefully wrapped',
+      'A warm place to gather',
+    ],
+  },
+  weddings: {
+    dateValue: 'October 3, 2027 · Port Rowan',
+    eventDate: '2027-10-03T16:30:00-05:00',
+    interaction: 'rsvp',
+    galleryStyle: 'editorial',
+    galleryCaptions: [
+      'An autumn promise',
+      'Quiet details before the ceremony',
+      'The ceremony setting',
+      'A table made for stories',
+      'Flowers beside the water',
+      'The reception begins',
+    ],
+  },
+  memorials: {
+    dateValue: '1938–2026',
+    eventDate: null,
+    interaction: 'tribute',
+    galleryStyle: 'archive',
+    galleryCaptions: [
+      'A life remembered with care',
+      'Favorite flowers from the family garden',
+      'An afternoon kept in the family archive',
+      'Quiet pages from a full life',
+      'Places that held meaning',
+      'A legacy shared across generations',
+    ],
+  },
+  anniversaries: {
+    dateValue: 'August 22, 2027 · 5:00 PM',
+    eventDate: '2027-08-22T17:00:00-05:00',
+    interaction: 'rsvp',
+    galleryStyle: 'then-now',
+    galleryCaptions: [
+      'Fifty years together',
+      'Then: the beginning of the story',
+      'Now: still choosing each other',
+      'The table for a golden evening',
+      'Old photographs, new memories',
+      'The next chapter together',
+    ],
+  },
+  graduations: {
+    dateValue: 'May 29, 2027 · 10:00 AM',
+    eventDate: '2027-05-29T10:00:00-05:00',
+    interaction: 'rsvp',
+    galleryStyle: 'yearbook',
+    galleryCaptions: [
+      'The graduate',
+      'Notes from the final semester',
+      'Cap, gown, and a bright future',
+      'Friends who made the year matter',
+      'A proud walk across the stage',
+      'The celebration after commencement',
+    ],
+  },
+  retirements: {
+    dateValue: 'November 7, 2027 · 6:00 PM',
+    eventDate: '2027-11-07T18:00:00-06:00',
+    interaction: 'rsvp',
+    galleryStyle: 'career-archive',
+    galleryCaptions: [
+      'A career worth celebrating',
+      'The workbench where ideas became real',
+      'Colleagues across the years',
+      'Milestones that moved the team forward',
+      'A well-earned toast',
+      'The next chapter starts here',
+    ],
+  },
+  reunions: {
+    dateValue: 'July 16–19, 2027',
+    eventDate: '2027-07-16T15:00:00-05:00',
+    interaction: 'rsvp',
+    galleryStyle: 'mosaic',
+    galleryCaptions: [
+      'Together again',
+      'The first arrivals at the lodge',
+      'Stories picked up where they left off',
+      'Old snapshots brought to the table',
+      'A long weekend outdoors',
+      'One group, many years',
+    ],
+  },
+  'just-because': {
+    dateValue: 'Made with love · No occasion required',
+    eventDate: null,
+    interaction: 'reveal',
+    galleryStyle: 'letters',
+    galleryCaptions: [
+      'No occasion. Every reason.',
+      'A letter saved for the right moment',
+      'Small details that feel like home',
+      'Flowers for an ordinary Tuesday',
+      'A favorite memory in print',
+      'Just because you matter',
+    ],
+  },
+  funerals: {
+    dateValue: 'Monday, February 8, 2027 · 11:00 AM',
+    eventDate: null,
+    interaction: 'condolence',
+    galleryStyle: 'remembrance',
+    galleryCaptions: [
+      'Remembering a steady, generous life',
+      'Flowers selected by the family',
+      'A quiet place for reflection',
+      'Details prepared for the service',
+      'A family-approved remembrance',
+      'With care, from everyone gathered',
+    ],
+  },
+  announcements: {
+    dateValue: 'News shared August 28, 2026',
+    eventDate: null,
+    interaction: 'announcement',
+    galleryStyle: 'progressive-reveal',
+    galleryCaptions: [
+      'A little news from Cedar Street',
+      'The first hint',
+      'A place ready for new memories',
+      'Keys to the next chapter',
+      'Boxes, paint, and possibilities',
+      'Home, revealed',
+    ],
+  },
+  'baby-showers': {
+    dateValue: 'November 14, 2027 · 11:00 AM',
+    eventDate: '2027-11-14T11:00:00-06:00',
+    interaction: 'rsvp',
+    galleryStyle: 'storybook',
+    galleryCaptions: [
+      'A small wonder on the way',
+      'A storybook welcome',
+      'Tiny details chosen with love',
+      'The shower table',
+      'Gifts for the growing family',
+      'A gentle afternoon together',
+    ],
+  },
+};
+
+function buildGallery(occasion: BaseOccasion, enhancement: OccasionEnhancement): GalleryImage[] {
+  const sources = [
+    occasion.heroImage,
+    occasion.detailImage,
+    ...[1, 2, 3, 4].map((index) => `/media/${occasion.slug}-gallery-${index}.webp`),
+  ];
+  const alts = [occasion.heroAlt, occasion.detailAlt, ...enhancement.galleryCaptions.slice(2)];
+  return sources.map((src, index) => ({
+    src,
+    alt: alts[index] ?? enhancement.galleryCaptions[index] ?? 'Fictional occasion gallery image',
+    caption: enhancement.galleryCaptions[index] ?? 'Occasion gallery image',
+    width: index < 2 ? 1600 : 1400,
+    height: index < 2 ? 1200 : 1050,
+    visible: true,
+    cover: index === 0,
+  }));
+}
+
+export const occasions: Occasion[] = baseOccasions.map((occasion) => {
+  const enhancement = occasionEnhancements[occasion.slug];
+  return {
+    ...occasion,
+    dateValue: enhancement.dateValue,
+    eventDate: enhancement.eventDate,
+    interaction: enhancement.interaction,
+    galleryStyle: enhancement.galleryStyle,
+    gallery: buildGallery(occasion, enhancement),
+  };
+});
 
 export function getOccasion(slug: string): Occasion | undefined {
   return occasions.find((occasion) => occasion.slug === slug);

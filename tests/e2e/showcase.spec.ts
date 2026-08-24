@@ -30,6 +30,9 @@ for (const route of routes) {
     const response = await page.goto(route, { waitUntil: 'networkidle' });
     expect(response?.status()).toBe(200);
     await expect(page.locator('main')).toBeVisible();
+    if (/^\/samples\/[^/]+$/.test(route)) {
+      await expect(page.locator('[data-public-gallery] .gallery-grid img')).toHaveCount(6);
+    }
     const results = await new AxeBuilder({ page }).analyze();
     expect(
       results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? '')),
@@ -74,6 +77,14 @@ for (const slug of slugs) {
     const firstSwitch = page.locator('[data-section-list] input').first();
     await firstSwitch.uncheck();
     await expect(page.locator('[data-save-indicator]')).toContainText('hidden');
+    await page.getByRole('button', { name: 'Gallery', exact: true }).click();
+    await expect(page.locator('[data-gallery-list] figure')).toHaveCount(6);
+    await expect(page.locator('[data-gallery-count]')).toHaveText('6 visible / 6 total');
+    const firstGalleryItem = page.locator('[data-gallery-list] figure').first();
+    await firstGalleryItem.getByLabel('Caption').fill(`Edited ${slug} caption`);
+    await firstGalleryItem.getByRole('button', { name: 'Save details' }).click();
+    await firstGalleryItem.getByRole('button', { name: 'Hide image' }).click();
+    await expect(page.locator('[data-gallery-count]')).toHaveText('5 visible / 6 total');
     await page.getByRole('button', { name: /Guest messages|Guests & replies/ }).click();
     const approve = page.getByRole('button', { name: 'Approve' }).first();
     if (await approve.isVisible()) await approve.click();
@@ -82,6 +93,43 @@ for (const slug of slugs) {
     await expect(title).toHaveValue(original);
   });
 }
+
+test('public gallery lightbox supports keyboard navigation and restores focus', async ({
+  page,
+}) => {
+  await page.goto('/samples/weddings');
+  const first = page.locator('[data-gallery-open]').first();
+  await first.focus();
+  await first.press('Enter');
+  const dialog = page.locator('[data-gallery-dialog]');
+  await expect(dialog).toBeVisible();
+  await expect(page.locator('[data-gallery-position]')).toHaveText('1 of 6');
+  await dialog.press('ArrowRight');
+  await expect(page.locator('[data-gallery-position]')).toHaveText('2 of 6');
+  await dialog.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(first).toBeFocused();
+});
+
+test('non-RSVP occasions use tailored public interactions', async ({ page }) => {
+  await page.goto('/samples/memorials');
+  await expect(page.locator('[data-countdown]')).toHaveCount(0);
+  await expect(
+    page.getByRole('heading', { name: 'Contribute to the family archive' }),
+  ).toBeVisible();
+  await page.goto('/samples/just-because');
+  await expect(page.locator('[data-countdown]')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Send a little appreciation' })).toBeVisible();
+  await page.goto('/samples/announcements');
+  await expect(page.getByRole('heading', { name: 'Celebrate the news' })).toBeVisible();
+  await page.goto('/samples/funerals');
+  await expect(page.getByLabel('Sample response').locator('option')).toHaveText([
+    'Choose a response',
+    'Planning to attend',
+    'Unable to attend, but sending condolences',
+    'Leave a condolence for family review',
+  ]);
+});
 
 for (const viewport of [
   { width: 375, height: 812 },

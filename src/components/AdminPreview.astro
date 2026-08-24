@@ -15,8 +15,9 @@ const previewData = {
   timeline: occasion.timeline,
   messages: occasion.messages,
   resources: occasion.resources,
-  gallery: [occasion.heroImage, occasion.detailImage],
+  gallery: occasion.gallery,
 };
+const hasRsvp = occasion.interaction === 'rsvp';
 ---
 
 <div class="portal" data-portal={occasion.slug}>
@@ -40,9 +41,7 @@ const previewData = {
       <span>Portfolio preview</span><strong>{occasion.sampleName}</strong>
     </div>
     <div class="portal-actions">
-      <a href={`/samples/${occasion.slug}`} target="_blank"
-        >Open public sample <span class="sr-only">in a new tab</span></a
-      >
+      <a href={`/samples/${occasion.slug}`}>Open public sample</a>
       <button type="button" data-reset>Reset demo</button>
     </div>
   </header>
@@ -85,7 +84,7 @@ const previewData = {
             'retirements',
             'reunions',
             'baby-showers',
-          ].includes(occasion.slug)
+          ].includes(occasion.slug) || hasRsvp
             ? 'Guests & replies'
             : 'Guest messages'
         }</button
@@ -141,7 +140,11 @@ const previewData = {
           <h3>Ready to manage</h3><dl>
             <div>
               <dt>Visible sections</dt><dd data-visible-count>{occasion.portalModules.length}</dd>
-            </div><div><dt>Gallery images</dt><dd data-gallery-count>2</dd></div><div>
+            </div><div>
+              <dt>Gallery images</dt><dd data-gallery-count>
+                {occasion.gallery.length} visible / {occasion.gallery.length} total
+              </dd>
+            </div><div>
               <dt>Awaiting review</dt><dd data-pending-count>
                 {occasion.messages.filter((m) => m.status === 'Pending').length}
               </dd>
@@ -258,7 +261,7 @@ const previewData = {
                 'retirements',
                 'reunions',
                 'baby-showers',
-              ].includes(occasion.slug)
+              ].includes(occasion.slug) || hasRsvp
                 ? 'Guest replies and messages'
                 : 'Guest messages'
             }
@@ -266,20 +269,31 @@ const previewData = {
         </div>
       </div>
       <div class="message-manager" data-message-list></div>
-      <aside class="rsvp-drawer">
-        <h4>Fictional RSVP snapshot</h4><ul>
-          <li><strong>18</strong> Attending</li><li><strong>4</strong> Awaiting reply</li><li>
-            <strong>2</strong> Sending wishes
-          </li>
-        </ul>
-      </aside>
+      {
+        hasRsvp && (
+          <aside class="rsvp-drawer">
+            <h4>Fictional RSVP snapshot</h4>
+            <ul>
+              <li>
+                <strong>18</strong> Attending
+              </li>
+              <li>
+                <strong>4</strong> Awaiting reply
+              </li>
+              <li>
+                <strong>2</strong> Sending wishes
+              </li>
+            </ul>
+          </aside>
+        )
+      }
     </section>
 
     <section class="portal-panel" data-panel="resources" hidden>
       <div class="panel-heading">
         <div>
           <p>Useful destinations</p><h3>{occasion.resources[0]?.kind ?? 'Resource'} links</h3><p>
-            Update labels and URLs used by this local preview.
+            Update labels and customer-approved destinations used by this local preview.
           </p>
         </div>
       </div>
