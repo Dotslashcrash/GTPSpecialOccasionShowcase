@@ -42,6 +42,33 @@
     });
   });
 
+  const privateGate = document.querySelector('[data-private-gate]');
+  const privateReveal = document.querySelector('[data-private-reveal]');
+  const privateKeyForm = document.querySelector('[data-private-key-form]');
+  const privateKeyStatus = document.querySelector('[data-private-key-status]');
+  const privateKeyInput = privateKeyForm?.querySelector('input[name="access-key"]');
+
+  privateKeyForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (privateKeyInput?.value.trim().toLowerCase() !== 'surprise') {
+      if (privateKeyStatus)
+        privateKeyStatus.textContent = 'That key did not open this demo. Try Surprise.';
+      privateKeyInput?.focus();
+      return;
+    }
+    if (privateKeyStatus) privateKeyStatus.textContent = '';
+    privateGate.hidden = true;
+    privateReveal.hidden = false;
+    privateReveal.querySelector('h1')?.focus();
+  });
+
+  document.querySelector('[data-private-lock]')?.addEventListener('click', () => {
+    privateReveal.hidden = true;
+    privateGate.hidden = false;
+    if (privateKeyInput) privateKeyInput.value = '';
+    privateKeyInput?.focus();
+  });
+
   document.querySelectorAll('[data-rsvp-demo]').forEach((form) => {
     form.addEventListener('submit', (event) => {
       event.preventDefault();

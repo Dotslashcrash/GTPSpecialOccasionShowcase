@@ -18,6 +18,7 @@ const slugs = [
 const routes = [
   '/',
   '/about-the-demos',
+  '/private-access-demo',
   ...slugs.flatMap((slug) => [`/samples/${slug}`, `/samples/${slug}/admin-preview`]),
 ];
 
@@ -88,6 +89,26 @@ test('homepage carries the GTP brand and complete one-time offer', async ({ page
   await expect(page.locator('[data-filter-result]')).toHaveText('Showing all 12 experiences.');
   await page.getByRole('button', { name: 'Remember' }).click();
   await expect(page.locator('[data-filter-result]')).toHaveText('Showing 2 remember experiences.');
+});
+
+test('private access demo reveals the site only with the shared key', async ({ page }) => {
+  await page.goto('/private-access-demo');
+  await expect(page.getByRole('heading', { name: 'A surprise is waiting.' })).toBeVisible();
+  await expect(page.getByText('Demo access key:')).toContainText('Surprise');
+  await expect(page.locator('[data-private-reveal]')).toBeHidden();
+
+  await page.getByLabel('Secure access key').fill('Not the key');
+  await page.getByRole('button', { name: 'Open the surprise' }).click();
+  await expect(page.locator('[data-private-key-status]')).toContainText('Try Surprise');
+  await expect(page.locator('[data-private-reveal]')).toBeHidden();
+
+  await page.getByLabel('Secure access key').fill('Surprise');
+  await page.getByRole('button', { name: 'Open the surprise' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Here’s to your brightest year yet.' }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Lock the demo again' }).click();
+  await expect(page.getByRole('heading', { name: 'A surprise is waiting.' })).toBeVisible();
 });
 
 for (const slug of slugs) {

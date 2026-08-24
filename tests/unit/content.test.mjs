@@ -71,7 +71,8 @@ test('event dates and interaction modes are appropriate and centrally consistent
 test('central offer matches the approved one-time package', () => {
   assert.equal(site.price, '$149.99');
   assert.match(site.billing, /one-time/i);
-  assert.equal(site.inclusions.length, 4);
+  assert.equal(site.inclusions.length, 5);
+  assert.ok(site.inclusions.some((item) => /private hosting.*access key/i.test(item)));
   assert.equal(
     site.offerUrl,
     'https://www.griffintechnologypartners.com/web-services/special-occasion-sites',
