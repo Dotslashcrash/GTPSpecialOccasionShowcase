@@ -12,7 +12,7 @@ Stock-photo subjects are models or members of the photographers’ scenes. They 
 | `holidays-hero.webp`, `holidays-detail.webp`           | krakenimages              | `https://unsplash.com/photos/7BpuzmcxlHU` |
 | `weddings-hero.webp`, `weddings-detail.webp`           | Rafa Sanfilippo           | `https://unsplash.com/photos/cWLEzYAcI3Q` |
 | `memorials-hero.webp`, `memorials-detail.webp`         | Valentin Karisch          | `https://unsplash.com/photos/VH6PqLkz1lo` |
-| `anniversaries-hero.webp`                              | Elist Nguyen              | `https://unsplash.com/photos/SKK6woNj4n8` |
+| `anniversaries-hero.webp`                              | Alan Morales              | `https://unsplash.com/photos/otN40HF8NAk` |
 | `anniversaries-detail.webp`                            | Filip Rankovic Grobgaard  | `https://unsplash.com/photos/mNlQo7I3M-A` |
 | `graduations-hero.webp`, `graduations-detail.webp`     | Md.Sabbir Sikder          | `https://unsplash.com/photos/b3uW0NoKFSg` |
 | `retirements-hero.webp`, `retirements-detail.webp`     | Age Cymru                 | `https://unsplash.com/photos/dxVDFXW3aAI` |

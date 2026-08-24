@@ -34,7 +34,7 @@ export const photoCredits: Record<string, CreditPair> = {
     detail: credit('Valentin Karisch', 'valentin_karisch', 'VH6PqLkz1lo'),
   },
   anniversaries: {
-    hero: credit('Elist Nguyen', 'hieuanhcauam', 'SKK6woNj4n8'),
+    hero: credit('Alan Morales', 'alanmoraales', 'otN40HF8NAk'),
     detail: credit('Filip Rankovic Grobgaard', 'filipgrobgaard', 'mNlQo7I3M-A'),
   },
   graduations: {

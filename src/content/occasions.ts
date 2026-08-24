@@ -403,7 +403,7 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Warm · nostalgic · celebratory',
     heroImage: '/media/anniversaries-hero.webp',
     detailImage: '/media/anniversaries-detail.webp',
-    heroAlt: 'A smiling couple holding hands and looking at each other',
+    heroAlt: 'An older couple smiling at each other outdoors with both heads fully visible',
     detailAlt: 'A smiling couple together at a formal anniversary celebration',
     details: [
       { label: 'Gathering', value: 'The Orchard Room' },
