@@ -1,3 +1,5 @@
+import { getPhotoCredits, type PhotoCredit } from './photoCredits.ts';
+
 export const occasionSlugs = [
   'birthdays',
   'holidays',
@@ -43,6 +45,8 @@ export type Occasion = {
   detailImage: string;
   heroAlt: string;
   detailAlt: string;
+  heroCredit: PhotoCredit;
+  detailCredit: PhotoCredit;
   details: Detail[];
   sections: StorySection[];
   timeline: { year: string; title: string; body: string }[];
@@ -60,7 +64,10 @@ export type Occasion = {
   gallery: GalleryImage[];
 };
 
-type BaseOccasion = Omit<Occasion, 'eventDate' | 'interaction' | 'galleryStyle' | 'gallery'>;
+type BaseOccasion = Omit<
+  Occasion,
+  'eventDate' | 'interaction' | 'galleryStyle' | 'gallery' | 'heroCredit' | 'detailCredit'
+>;
 
 const baseOccasions: BaseOccasion[] = [
   {
@@ -79,8 +86,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Joyful · cinematic · personal',
     heroImage: '/media/birthdays-hero.webp',
     detailImage: '/media/birthdays-detail.webp',
-    heroAlt: 'Friends celebrating together beneath warm string lights',
-    detailAlt: 'Colorful birthday cake set for a milestone celebration',
+    heroAlt: 'A family smiling together at a balloon-filled outdoor birthday party',
+    detailAlt: 'A family smiling together at a balloon-filled outdoor birthday party',
     details: [
       { label: 'Gather', value: 'The Glasshouse · Brookfield' },
       { label: 'Dress', value: 'Color, sparkle, and dancing shoes' },
@@ -162,8 +169,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Seasonal · welcoming · textured',
     heroImage: '/media/holidays-hero.webp',
     detailImage: '/media/holidays-detail.webp',
-    heroAlt: 'A warmly lit family table prepared for a holiday gathering',
-    detailAlt: 'Hands finishing a seasonal dessert together',
+    heroAlt: 'Family and friends raising glasses around a warmly lit holiday table',
+    detailAlt: 'Family and friends raising glasses around a warmly lit holiday table',
     details: [
       { label: 'Friday', value: 'Soup supper and porch lights' },
       { label: 'Saturday', value: 'Market, feast, and gift exchange' },
@@ -240,8 +247,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Editorial · romantic · assured',
     heroImage: '/media/weddings-hero.webp',
     detailImage: '/media/weddings-detail.webp',
-    heroAlt: 'A newly married couple walking outside after their ceremony',
-    detailAlt: 'Elegant table details at a seaside wedding reception',
+    heroAlt: 'A bride and groom laughing together with both faces fully visible',
+    detailAlt: 'A bride and groom laughing together on their wedding day',
     details: [
       { label: 'Ceremony', value: '4:00 PM · North Bluff Gardens' },
       { label: 'Reception', value: '5:30 PM · The Tide Room' },
@@ -315,8 +322,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Calm · enduring · reflective',
     heroImage: '/media/memorials-hero.webp',
     detailImage: '/media/memorials-detail.webp',
-    heroAlt: 'Soft morning light crossing an open family photo album',
-    detailAlt: 'A quiet garden path bordered by sage and wildflowers',
+    heroAlt: 'Candles and flowers arranged together at a public memorial',
+    detailAlt: 'Candles and flowers arranged together in remembrance',
     details: [
       { label: 'In her words', value: '“Notice the small kindnesses.”' },
       { label: 'A cause she loved', value: 'The fictional Northfield Reading Room' },
@@ -396,8 +403,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Warm · nostalgic · celebratory',
     heroImage: '/media/anniversaries-hero.webp',
     detailImage: '/media/anniversaries-detail.webp',
-    heroAlt: 'An older couple laughing together in afternoon light',
-    detailAlt: 'A vintage wedding photograph beside a recent portrait',
+    heroAlt: 'A smiling couple holding hands and looking at each other',
+    detailAlt: 'A smiling couple together at a formal anniversary celebration',
     details: [
       { label: 'Gathering', value: 'The Orchard Room' },
       { label: 'Dinner', value: 'Their favorites, family style' },
@@ -473,8 +480,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Energetic · optimistic · smart',
     heroImage: '/media/graduations-hero.webp',
     detailImage: '/media/graduations-detail.webp',
-    heroAlt: 'A graduate smiling outdoors in cap and gown',
-    detailAlt: 'Sketchbook and engineering models on a study table',
+    heroAlt: 'Graduates tossing their caps in celebration',
+    detailAlt: 'Graduates celebrating together after commencement',
     details: [
       { label: 'Ceremony', value: 'Westbridge Field House' },
       { label: 'Open house', value: '2:00–6:00 PM · Lee family garden' },
@@ -556,8 +563,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Dignified · accomplished · forward-looking',
     heroImage: '/media/retirements-hero.webp',
     detailImage: '/media/retirements-detail.webp',
-    heroAlt: 'A respected professional smiling in a sunlit office',
-    detailAlt: 'Colleagues sharing stories around a dinner table',
+    heroAlt: 'An older woman applauding during a community appreciation event',
+    detailAlt: 'An older woman smiling and applauding during a celebration',
     details: [
       { label: 'Venue', value: 'Harbor Science Museum' },
       { label: 'Program', value: 'Dinner, stories, and a short film' },
@@ -633,8 +640,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Welcoming · outdoorsy · communal',
     heroImage: '/media/reunions-hero.webp',
     detailImage: '/media/reunions-detail.webp',
-    heroAlt: 'Friends gathered on a lakeside dock at sunset',
-    detailAlt: 'Old camp photographs and handwritten notes on a table',
+    heroAlt: 'Several generations of a family smiling together outdoors',
+    detailAlt: 'A family smiling together during an outdoor reunion',
     details: [
       { label: 'Base camp', value: 'Alder Lake Lodge' },
       { label: 'Saturday', value: 'Paddle, picnic, story night' },
@@ -712,8 +719,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Intimate · handmade · sincere',
     heroImage: '/media/just-because-hero.webp',
     detailImage: '/media/just-because-detail.webp',
-    heroAlt: 'A handwritten letter and flowers on a sunny table',
-    detailAlt: 'Two friends sharing a quiet laugh outdoors',
+    heroAlt: 'Friends laughing and celebrating together with cupcakes',
+    detailAlt: 'Friends sharing a cheerful just-because celebration',
     details: [
       { label: 'Reason 01', value: 'You remember the small things' },
       { label: 'Reason 02', value: 'You make time feel generous' },
@@ -785,8 +792,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Compassionate · clear · dignified',
     heroImage: '/media/funerals-hero.webp',
     detailImage: '/media/funerals-detail.webp',
-    heroAlt: 'White flowers arranged beside a softly lit window',
-    detailAlt: 'A quiet chapel prepared for a remembrance service',
+    heroAlt: 'White flowers arranged carefully for a funeral remembrance',
+    detailAlt: 'White remembrance flowers resting on a ceremonial tray',
     details: [
       { label: 'Visitation', value: 'Sunday · 3:00–6:00 PM' },
       { label: 'Service', value: 'Monday · 11:00 AM' },
@@ -874,8 +881,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Dramatic · playful · flexible',
     heroImage: '/media/announcements-hero.webp',
     detailImage: '/media/announcements-detail.webp',
-    heroAlt: 'A couple holding keys in front of a new front door',
-    detailAlt: 'Moving boxes, a houseplant, and a painted welcome sign',
+    heroAlt: 'A happy couple holding their new-home keys beside moving boxes',
+    detailAlt: 'A couple celebrating a new home with keys and moving boxes',
     details: [
       { label: 'The news', value: 'We bought our first home' },
       { label: 'The place', value: 'Fictional Maple Crossing' },
@@ -958,8 +965,8 @@ const baseOccasions: BaseOccasion[] = [
     mood: 'Soft · refined · welcoming',
     heroImage: '/media/baby-showers-hero.webp',
     detailImage: '/media/baby-showers-detail.webp',
-    heroAlt: 'Soft blue baby decorations arranged for a shower',
-    detailAlt: 'Small gifts and handwritten wishes beside a brunch table',
+    heroAlt: 'An expecting couple playing a reveal game at their outdoor baby shower',
+    detailAlt: 'A group of women celebrating together at a pink baby shower',
     details: [
       { label: 'Venue', value: 'The Sunroom at Willow House' },
       { label: 'Theme', value: 'Clouds, stories, and soft blues' },
@@ -1223,6 +1230,7 @@ function buildGallery(occasion: BaseOccasion, enhancement: OccasionEnhancement):
 
 export const occasions: Occasion[] = baseOccasions.map((occasion) => {
   const enhancement = occasionEnhancements[occasion.slug];
+  const credits = getPhotoCredits(occasion.slug);
   return {
     ...occasion,
     dateValue: enhancement.dateValue,
@@ -1230,6 +1238,8 @@ export const occasions: Occasion[] = baseOccasions.map((occasion) => {
     interaction: enhancement.interaction,
     galleryStyle: enhancement.galleryStyle,
     gallery: buildGallery(occasion, enhancement),
+    heroCredit: credits.hero,
+    detailCredit: credits.detail,
   };
 });
 

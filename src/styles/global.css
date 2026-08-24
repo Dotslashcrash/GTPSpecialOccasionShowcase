@@ -85,8 +85,70 @@
   filter: brightness(0.92);
 }
 .gallery-grid figcaption {
+  display: grid;
+  gap: 0.3rem;
   padding: 0.65rem 0.1rem 1rem;
   font-size: 0.88rem;
+}
+.photo-credit {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+  color: inherit;
+  font-size: 0.76rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.photo-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+.photo-credit-compact {
+  opacity: 0.82;
+}
+.photo-credits-page {
+  padding-bottom: clamp(4rem, 8vw, 8rem);
+}
+.photo-credit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2.5rem);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 5vw, 5rem) clamp(3rem, 7vw, 7rem);
+}
+.photo-credit-grid figure {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #243346;
+  border-radius: 1rem;
+  background: #101a28;
+}
+.photo-credit-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.photo-credit-grid figcaption {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem 1.2rem;
+  color: #e9edf4;
+}
+.demo-media-notice {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem);
+  border-radius: 1.5rem;
+  background: #f0ebe1;
+  color: #101722;
+}
+@media (max-width: 720px) {
+  .photo-credit-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .gallery-scrapbook figure:nth-child(odd) {
   transform: rotate(-0.6deg);
@@ -1197,6 +1259,40 @@
   }
 }
 
+.cinematic-photo-credit {
+  position: absolute;
+  z-index: 5;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.35rem;
+  background: #03070dbf;
+  color: #f8fafc;
+}
+.occasion-browser .card-copy .photo-credit {
+  margin-top: 0.25rem;
+  color: #516175;
+  opacity: 1;
+}
+.experience-photo > .experience-photo-credit {
+  position: absolute;
+  z-index: 3;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  display: block;
+  color: #f8fafc;
+  text-align: left;
+  text-shadow: 0 1px 4px #000;
+}
+.experience-photo > .experience-photo-credit .photo-credit {
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 /* Private access cover demonstration */
 .private-demo-page {
   min-height: 44rem;
@@ -1805,6 +1901,53 @@ a {
   font-weight: 900;
   text-shadow: 0 1px 5px #000;
 }
+.private-cover-art {
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 20% 20%, #be123c55, transparent 35%),
+    linear-gradient(145deg, #08111f, #152942 58%, #07101d);
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+}
+.private-cover-art::after {
+  position: absolute;
+  inset: 1rem;
+  border: 1px solid #ffffff26;
+  content: '';
+  pointer-events: none;
+}
+.private-cover-lock {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto;
+  border: 1px solid #ffffff66;
+  border-radius: 50%;
+  color: #f0c9d1;
+  font-size: 1.5rem;
+}
+.private-cover-art strong {
+  max-width: 14ch;
+  font-family: var(--display);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  line-height: 1;
+}
+.private-cover-art small {
+  color: #cbd5e1;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.private-collection-card .card-actions span {
+  color: #66778a;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
 .card-copy {
   display: flex;
   flex-direction: column;
@@ -2282,6 +2425,10 @@ a {
   font-size: 0.74rem;
   font-weight: 800;
 }
+.sample-hero-image figcaption > span:first-child {
+  display: block;
+  margin-bottom: 0.35rem;
+}
 .hero-number {
   position: absolute;
   right: 40%;
@@ -2384,6 +2531,9 @@ a {
 }
 .sample-photo-story figure {
   margin: 0;
+}
+.sample-photo-story figure figcaption {
+  padding-top: 0.65rem;
 }
 .sample-photo-story img {
   width: 100%;

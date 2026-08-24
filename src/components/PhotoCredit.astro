@@ -1,0 +1,11 @@
+---
+import type { PhotoCredit } from '../content/photoCredits';
+
+const { credit, compact = false } = Astro.props as { credit: PhotoCredit; compact?: boolean };
+---
+
+<span class:list={['photo-credit', { 'photo-credit-compact': compact }]}>
+  Photo by <a href={credit.profileUrl} target="_blank" rel="noopener noreferrer"
+    >{credit.photographer}</a
+  > on <a href={credit.photoUrl} target="_blank" rel="noopener noreferrer">Unsplash</a>
+</span>

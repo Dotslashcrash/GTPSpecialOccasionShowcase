@@ -17,6 +17,11 @@ test('contains twelve unique, complete occasions', () => {
     assert.ok(occasion.heroImage.startsWith('/media/'));
     assert.equal(occasion.gallery.length, 6, `${occasion.slug} needs six gallery images`);
     assert.equal(new Set(occasion.gallery.map(({ src }) => src)).size, 6);
+    assert.match(occasion.heroCredit.profileUrl, /^https:\/\/unsplash\.com\/@/);
+    assert.match(occasion.heroCredit.photoUrl, /^https:\/\/unsplash\.com\/photos\//);
+    assert.ok(occasion.heroCredit.photographer);
+    assert.match(occasion.detailCredit.profileUrl, /^https:\/\/unsplash\.com\/@/);
+    assert.match(occasion.detailCredit.photoUrl, /^https:\/\/unsplash\.com\/photos\//);
     assert.ok(
       occasion.gallery.every(
         ({ alt, caption, width, height }) => alt && caption && width > 0 && height > 0,

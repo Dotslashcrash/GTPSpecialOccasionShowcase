@@ -6,34 +6,24 @@ The local files listed below were downloaded from Unsplash and are used under th
 
 Stock-photo subjects are models or members of the photographers’ scenes. They are not Griffin Technology Partners customers, and the surrounding names, events, messages, and organizations are entirely fictional.
 
-| Local asset                 | Unsplash source asset                                          |
-| --------------------------- | -------------------------------------------------------------- |
-| `birthdays-hero.webp`       | `https://images.unsplash.com/photo-1530103862676-de8c9debad1d` |
-| `birthdays-detail.webp`     | `https://images.unsplash.com/photo-1578985545062-69928b1d9587` |
-| `holidays-hero.webp`        | `https://images.unsplash.com/photo-1670899460364-ebc917bac09a` |
-| `holidays-detail.webp`      | `https://images.unsplash.com/photo-1665575061295-bd3aa839ff8c` |
-| `weddings-hero.webp`        | `https://images.unsplash.com/photo-1519741497674-611481863552` |
-| `weddings-detail.webp`      | `https://images.unsplash.com/photo-1519225421980-715cb0215aed` |
-| `memorials-hero.webp`       | `https://images.unsplash.com/photo-1544027993-37dbfe43562a`    |
-| `memorials-detail.webp`     | `https://images.unsplash.com/photo-1471879832106-c7ab9e0cee23` |
-| `anniversaries-hero.webp`   | `https://images.unsplash.com/photo-1544005313-94ddf0286df2`    |
-| `anniversaries-detail.webp` | `https://images.unsplash.com/photo-1529156069898-49953e39b3ac` |
-| `graduations-hero.webp`     | `https://images.unsplash.com/photo-1721441932559-6fd00cd49e46` |
-| `graduations-detail.webp`   | `https://images.unsplash.com/photo-1455390582262-044cdead277a` |
-| `retirements-hero.webp`     | `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d` |
-| `retirements-detail.webp`   | `https://images.unsplash.com/photo-1556761175-b413da4baf72`    |
-| `reunions-hero.webp`        | `https://images.unsplash.com/photo-1474552226712-ac0f0961a954` |
-| `reunions-detail.webp`      | `https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81` |
-| `just-because-hero.webp`    | `https://images.unsplash.com/photo-1499951360447-b19be8fe80f5` |
-| `just-because-detail.webp`  | `https://images.unsplash.com/photo-1529156069898-49953e39b3ac` |
-| `funerals-hero.webp`        | `https://images.unsplash.com/photo-1490750967868-88aa4486c946` |
-| `funerals-detail.webp`      | `https://images.unsplash.com/photo-1519491050282-cf00c82424b4` |
-| `announcements-hero.webp`   | `https://images.unsplash.com/photo-1560518883-ce09059eeffa`    |
-| `announcements-detail.webp` | `https://images.unsplash.com/photo-1600585154340-be6161a56a0c` |
-| `baby-showers-hero.webp`    | `https://images.unsplash.com/photo-1531988042231-d39a9cc12a9a` |
-| `baby-showers-detail.webp`  | `https://images.unsplash.com/photo-1512909006721-3d6018887383` |
+| Local asset(s)                                         | Photographer              | Original Unsplash photo                   |
+| ------------------------------------------------------ | ------------------------- | ----------------------------------------- |
+| `birthdays-hero.webp`, `birthdays-detail.webp`         | sadiq abdulmalik          | `https://unsplash.com/photos/rxBAxFpjotM` |
+| `holidays-hero.webp`, `holidays-detail.webp`           | krakenimages              | `https://unsplash.com/photos/7BpuzmcxlHU` |
+| `weddings-hero.webp`, `weddings-detail.webp`           | Rafa Sanfilippo           | `https://unsplash.com/photos/cWLEzYAcI3Q` |
+| `memorials-hero.webp`, `memorials-detail.webp`         | Valentin Karisch          | `https://unsplash.com/photos/VH6PqLkz1lo` |
+| `anniversaries-hero.webp`                              | Elist Nguyen              | `https://unsplash.com/photos/SKK6woNj4n8` |
+| `anniversaries-detail.webp`                            | Filip Rankovic Grobgaard  | `https://unsplash.com/photos/mNlQo7I3M-A` |
+| `graduations-hero.webp`, `graduations-detail.webp`     | Md.Sabbir Sikder          | `https://unsplash.com/photos/b3uW0NoKFSg` |
+| `retirements-hero.webp`, `retirements-detail.webp`     | Age Cymru                 | `https://unsplash.com/photos/dxVDFXW3aAI` |
+| `reunions-hero.webp`, `reunions-detail.webp`           | Ashwini Chaudhary (Monty) | `https://unsplash.com/photos/GmDVGjqeVEk` |
+| `just-because-hero.webp`, `just-because-detail.webp`   | Apartment Life            | `https://unsplash.com/photos/luwwu7ysyKU` |
+| `funerals-hero.webp`, `funerals-detail.webp`           | Chanatip Sangbunnag       | `https://unsplash.com/photos/1fCBr1EpyM0` |
+| `announcements-hero.webp`, `announcements-detail.webp` | Vitaly Gariev             | `https://unsplash.com/photos/x8l4lN6-xd0` |
+| `baby-showers-hero.webp`                               | Samuel Lopez Cruz         | `https://unsplash.com/photos/o8_OaIAQ-R4` |
+| `baby-showers-detail.webp`                             | Samuel Lopez Cruz         | `https://unsplash.com/photos/pvDXZKJjCdg` |
 
-The source asset URL and exact identifier are retained here for auditability. Image crops were requested at 1600×1200 with WebP output for this project.
+The original page, photographer, and exact photo identifier are retained here for auditability. Image crops were created at 1600×1200 with WebP output for this project. Visible credits link to both the photographer and the original photo with Unsplash referral parameters.
 
 ## Pexels gallery photographs
 

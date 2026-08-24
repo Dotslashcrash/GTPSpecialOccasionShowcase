@@ -2,6 +2,7 @@
 import { occasions, type Occasion } from '../content/occasions';
 import { site } from '../content/site';
 import Countdown from './Countdown.astro';
+import PhotoCredit from './PhotoCredit.astro';
 import ShareButton from './ShareButton.astro';
 
 const { occasion } = Astro.props as { occasion: Occasion };
@@ -85,7 +86,10 @@ const nextOccasion = occasions[(currentIndex + 1) % occasions.length] ?? occasio
       </div>
       <figure class="sample-hero-image">
         <img src={occasion.heroImage} alt={occasion.heroAlt} width="1100" height="820" />
-        <figcaption>{occasion.dateValue}</figcaption>
+        <figcaption>
+          <span>{occasion.dateValue}</span>
+          <PhotoCredit credit={occasion.heroCredit} compact />
+        </figcaption>
       </figure>
       {
         occasion.layout === 'cinematic' && (
@@ -155,6 +159,7 @@ const nextOccasion = occasions[(currentIndex + 1) % occasions.length] ?? occasio
           height="760"
           loading="lazy"
         />
+        <figcaption><PhotoCredit credit={occasion.detailCredit} compact /></figcaption>
       </figure>
       <div>
         <p>{occasion.sections[1]?.eyebrow}</p>
@@ -254,7 +259,15 @@ const nextOccasion = occasions[(currentIndex + 1) % occasions.length] ?? occasio
                   decoding="async"
                 />
               </button>
-              <figcaption>{image.caption}</figcaption>
+              <figcaption>
+                <span>{image.caption}</span>
+                {index < 2 && (
+                  <PhotoCredit
+                    credit={index === 0 ? occasion.heroCredit : occasion.detailCredit}
+                    compact
+                  />
+                )}
+              </figcaption>
             </figure>
           ))
         }
@@ -383,6 +396,7 @@ const nextOccasion = occasions[(currentIndex + 1) % occasions.length] ?? occasio
     <nav aria-label="Continue exploring">
       <a href={`/samples/${nextOccasion.slug}`}>Explore another occasion</a>
       <a href={`/samples/${occasion.slug}/admin-preview`}>Preview the client portal</a>
+      <a href="/photo-credits">Demo photo credits</a>
       <a href={`${site.offerUrl}?occasion=${occasion.slug}`}>Start your site with GTP</a>
     </nav>
   </footer>

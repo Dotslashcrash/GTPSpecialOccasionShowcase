@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrandHeader from '../components/BrandHeader.astro';
+import BrandFooter from '../components/BrandFooter.astro';
+import PhotoCredit from '../components/PhotoCredit.astro';
+import { occasions } from '../content/occasions';
+
+const creditedImages = occasions.flatMap((occasion) => {
+  const images = [
+    {
+      key: `${occasion.slug}-hero`,
+      label: `${occasion.category} demo`,
+      src: occasion.heroImage,
+      alt: occasion.heroAlt,
+      credit: occasion.heroCredit,
+    },
+  ];
+  if (occasion.detailCredit.photoUrl !== occasion.heroCredit.photoUrl) {
+    images.push({
+      key: `${occasion.slug}-detail`,
+      label: `${occasion.category} demo · second feature`,
+      src: occasion.detailImage,
+      alt: occasion.detailAlt,
+      credit: occasion.detailCredit,
+    });
+  }
+  return images;
+});
+---
+
+<BaseLayout
+  title="Photo Credits | GTP Special Occasion Website Demos"
+  description="Photographer and source credits for the Unsplash images used in Griffin Technology Partners' fictional special-occasion portfolio demos."
+  canonicalPath="/photo-credits"
+>
+  <BrandHeader />
+  <main id="main-content" class="about-page photo-credits-page">
+    <header>
+      <p class="eyebrow">Demo image credits</p>
+      <h1>The people behind the pictures.</h1>
+      <p>
+        These licensed Unsplash photographs appear only in this fictional portfolio. Every image is
+        paired with its photographer and original source below.
+      </p>
+    </header>
+    <div class="photo-credit-grid">
+      {
+        creditedImages.map((image) => (
+          <figure>
+            <img src={image.src} alt={image.alt} width="800" height="600" loading="lazy" />
+            <figcaption>
+              <strong>{image.label}</strong>
+              <PhotoCredit credit={image.credit} />
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+    <section class="demo-media-notice">
+      <p class="eyebrow">For demonstration only</p>
+      <h2>Your finished site begins with your choices.</h2>
+      <p>
+        Stock and AI-generated images used in these demos will not be included in a custom customer
+        design unless the customer specifically requests and approves them.
+      </p>
+    </section>
+  </main>
+  <BrandFooter />
+</BaseLayout>

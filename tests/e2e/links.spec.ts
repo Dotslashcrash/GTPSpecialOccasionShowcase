@@ -20,7 +20,8 @@ test('all internal links resolve and approved external destinations are used', a
     external.every(
       (href) =>
         href.startsWith('https://www.griffintechnologypartners.com/') ||
-        href.startsWith('https://buy.stripe.com/'),
+        href.startsWith('https://buy.stripe.com/') ||
+        href.startsWith('https://unsplash.com/'),
     ),
   ).toBe(true);
   expect(external.filter((href) => href.startsWith('https://buy.stripe.com/'))).toHaveLength(3);

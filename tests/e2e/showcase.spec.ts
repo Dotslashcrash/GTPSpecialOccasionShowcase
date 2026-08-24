@@ -18,6 +18,7 @@ const slugs = [
 const routes = [
   '/',
   '/about-the-demos',
+  '/photo-credits',
   '/private-access-demo',
   ...slugs.flatMap((slug) => [`/samples/${slug}`, `/samples/${slug}/admin-preview`]),
 ];
@@ -62,6 +63,10 @@ test('homepage filters and every sample destination are present', async ({ page 
     await expect(page.locator(`a[href="/samples/${slug}"]`).first()).toBeVisible();
     await expect(page.locator(`a[href="/samples/${slug}/admin-preview"]`).first()).toHaveCount(1);
   }
+  await expect(
+    page.getByRole('link', { name: 'Try the private access website cover' }),
+  ).toBeVisible();
+  await expect(page.getByText('Demo key: Surprise').first()).toBeVisible();
 });
 
 test('homepage carries the GTP brand and complete one-time offer', async ({ page }) => {
@@ -86,7 +91,7 @@ test('homepage carries the GTP brand and complete one-time offer', async ({ page
     .locator('a[href^="https://buy.stripe.com/"]')
     .evaluateAll((links) => [...new Set(links.map((link) => link.getAttribute('href')))]);
   expect(checkoutLinks).toHaveLength(3);
-  await expect(page.locator('[data-filter-result]')).toHaveText('Showing all 12 experiences.');
+  await expect(page.locator('[data-filter-result]')).toHaveText('Showing all 13 experiences.');
   await page.getByRole('button', { name: 'Remember' }).click();
   await expect(page.locator('[data-filter-result]')).toHaveText('Showing 2 remember experiences.');
 });

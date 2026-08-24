@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BrandHeader from '../components/BrandHeader.astro';
 import BrandFooter from '../components/BrandFooter.astro';
+import PhotoCredit from '../components/PhotoCredit.astro';
 import { occasions } from '../content/occasions';
 import { site } from '../content/site';
 
@@ -11,6 +12,7 @@ const getRequiredOccasion = (slug: string) => {
   return occasion;
 };
 const featuredWedding = getRequiredOccasion('weddings');
+const featuredReunion = getRequiredOccasion('reunions');
 const homeImage = (slug: string, width: 480 | 800 | 1200) => `/media/home/${slug}-${width}.webp`;
 const homeSrcset = (slug: string) =>
   `${homeImage(slug, 480)} 480w, ${homeImage(slug, 800)} 800w, ${homeImage(slug, 1200)} 1200w`;
@@ -68,13 +70,21 @@ const structuredData = [
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Special occasion website examples',
-    numberOfItems: occasions.length,
-    itemListElement: occasions.map((occasion, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: `${occasion.category} website example`,
-      url: `${site.baseUrl}/samples/${occasion.slug}`,
-    })),
+    numberOfItems: occasions.length + 1,
+    itemListElement: [
+      ...occasions.map((occasion, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: `${occasion.category} website example`,
+        url: `${site.baseUrl}/samples/${occasion.slug}`,
+      })),
+      {
+        '@type': 'ListItem',
+        position: occasions.length + 1,
+        name: 'Private access website demonstration',
+        url: `${site.baseUrl}/private-access-demo`,
+      },
+    ],
   },
   {
     '@context': 'https://schema.org',
@@ -89,8 +99,8 @@ const structuredData = [
 ---
 
 <BaseLayout
-  title="Custom Special Occasion Websites | 12 Live Examples | Griffin Technology Partners"
-  description="Explore 12 custom websites for birthdays, weddings, memorials, announcements, reunions, and more. One-time packages from Griffin Technology Partners start at $149.99."
+  title="Custom Special Occasion Websites | 13 Live Examples | Griffin Technology Partners"
+  description="Explore 12 custom occasion websites plus a private-access surprise demo. One-time packages from Griffin Technology Partners start at $149.99."
 >
   <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <BrandHeader />
@@ -108,7 +118,7 @@ const structuredData = [
           <a class="button button-crimson" href={site.purchaseOptions[0].url}
             >Start yours · {site.price}</a
           >
-          <a class="button button-ghost" href="#occasions">Explore 12 live examples</a>
+          <a class="button button-ghost" href="#occasions">Explore 13 live examples</a>
         </div>
         <p class="hero-proof-line">
           Custom design · Standard domain · Protected client portal · Private launch available
@@ -128,16 +138,20 @@ const structuredData = [
           />
           <span><b>Featured</b>{featuredWedding.category} · View live experience</span>
         </a>
+        <div class="cinematic-photo-credit">
+          <PhotoCredit credit={featuredWedding.heroCredit} compact />
+        </div>
       </div>
     </section>
 
     <section class="occasion-browser" id="occasions" aria-labelledby="occasion-heading">
       <div class="section-heading">
         <p class="eyebrow">The complete collection</p>
-        <h2 id="occasion-heading">Twelve stories. Twelve distinct directions.</h2>
+        <h2 id="occasion-heading">Twelve stories. One private reveal.</h2>
         <p>
           Every occasion receives its own visual language. Filter the collection, then open any
-          guest site or its interactive client-portal preview.
+          guest site, its interactive client-portal preview, or the secure surprise cover.
+          <a href="/photo-credits">See the photographers behind the demo images.</a>
         </p>
       </div>
       <div class="filters" role="group" aria-label="Filter occasions">
@@ -157,7 +171,7 @@ const structuredData = [
           >Announce</button
         >
       </div>
-      <p class="filter-result" data-filter-result aria-live="polite">Showing all 12 experiences.</p>
+      <p class="filter-result" data-filter-result aria-live="polite">Showing all 13 experiences.</p>
       <div class="occasion-grid">
         {
           occasions.map((occasion, index) => {
@@ -192,6 +206,7 @@ const structuredData = [
                   </p>
                   <h3>{occasion.sampleName}</h3>
                   <p>{occasion.shortDescription}</p>
+                  <PhotoCredit credit={occasion.heroCredit} compact />
                   <div class="card-actions">
                     <a href={`/samples/${occasion.slug}`}>Guest experience</a>
                     <a href={`/samples/${occasion.slug}/admin-preview`}>Client portal</a>
@@ -201,20 +216,47 @@ const structuredData = [
             );
           })
         }
+        <article class="occasion-card private-collection-card" data-group="announce">
+          <a
+            class="card-image private-cover-art"
+            href="/private-access-demo"
+            aria-label="Try the private access website cover"
+          >
+            <b class="private-cover-lock" aria-hidden="true">✦</b>
+            <strong>Private until the moment is right.</strong>
+            <small>Secure access key required</small>
+            <span>13</span>
+          </a>
+          <div class="card-copy">
+            <p>Private access · Surprise-ready</p>
+            <h3>The Private Reveal</h3>
+            <p>
+              See how a shareable access key keeps the entire site covered until guests are invited
+              in.
+            </p>
+            <div class="card-actions">
+              <a href="/private-access-demo">Try the cover</a>
+              <span>Demo key: Surprise</span>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
     <section class="experience-split" aria-labelledby="experience-split-title">
       <div class="experience-photo">
         <img
-          src={homeImage(featuredWedding.slug, 800)}
-          srcset={homeSrcset(featuredWedding.slug)}
+          src={homeImage(featuredReunion.slug, 800)}
+          srcset={homeSrcset(featuredReunion.slug)}
           sizes="(max-width: 980px) 100vw, 45vw"
-          alt=""
+          alt={featuredReunion.heroAlt}
           width="1000"
           height="1100"
           loading="lazy"
         />
+        <div class="experience-photo-credit">
+          <PhotoCredit credit={featuredReunion.heroCredit} compact />
+        </div>
       </div>
       <div class="experience-copy">
         <p class="eyebrow">One website, two clear experiences</p>
