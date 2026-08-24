@@ -22,7 +22,6 @@ import { site } from '../content/site';
   <div class="footer-column">
     <strong>Explore</strong>
     <a href="/#occasions">All occasions</a>
-    <a href="/#process">How it works</a>
     <a href="/about-the-demos">About these demos</a>
   </div>
   <div class="footer-column">
@@ -31,5 +30,12 @@ import { site } from '../content/site';
     <a href={site.purchaseOptions[0].url}>Secure one-time checkout</a>
     <a href={`mailto:${site.salesEmail}`}>{site.salesEmail}</a>
   </div>
-  <p class="fine-print">Every person, event, message, and organization shown here is fictional.</p>
+  <div class="fine-print">
+    <p>Every person, event, message, and organization shown here is fictional.</p>
+    <p>
+      Stock and AI-generated images are used for demonstration purposes only. They will not be used
+      in a customer’s custom design unless the customer specifically requests and approves their
+      use.
+    </p>
+  </div>
 </footer>

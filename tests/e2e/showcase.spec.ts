@@ -73,6 +73,14 @@ test('homepage carries the GTP brand and complete one-time offer', async ({ page
     page.getByRole('heading', { name: 'Turn the moment into a place everyone can visit.' }),
   ).toBeVisible();
   await expect(page.getByText('One time. No subscription.')).toBeVisible();
+  await expect(
+    page.getByText('Optional private hosting with a shareable secure access key'),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      'Stock and AI-generated images are used for demonstration purposes only. They will not be used in a customer’s custom design unless the customer specifically requests and approves their use.',
+    ),
+  ).toBeVisible();
   const checkoutLinks = await page
     .locator('a[href^="https://buy.stripe.com/"]')
     .evaluateAll((links) => [...new Set(links.map((link) => link.getAttribute('href')))]);

@@ -12,6 +12,7 @@ export const site = {
     'One standard domain registration, subject to availability',
     '30 days of managed hosting after launch',
     'Protected administration for approved content and media',
+    'Optional private hosting with a shareable secure access key',
   ],
   purchaseOptions: [
     {
