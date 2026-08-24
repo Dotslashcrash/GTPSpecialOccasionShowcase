@@ -2,7 +2,9 @@
 
 ## Offer updates
 
-Edit `src/content/site.ts` to update the starting price, billing language, inclusions, offer URL, or sales address. Components read these values directly, so the portfolio does not scatter price strings.
+Edit `src/content/site.ts` to update the starting price, billing language, inclusions, purchase options, Stripe Payment Links, offer URL, or sales address. Components read these values directly, so the portfolio does not scatter price strings.
+
+Stripe checkout URLs are hosted Payment Links. Each corresponding Stripe price must remain `one_time` with no recurring interval. Never place a Stripe secret or restricted API key in this repository.
 
 ## Sample writing
 

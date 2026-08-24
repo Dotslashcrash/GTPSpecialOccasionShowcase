@@ -13,6 +13,8 @@ A static-first portfolio of twelve fictional public occasion websites and twelve
 
 All people, dates, events, messages, and organizations are fictional. Stock-photo subjects are not GTP customers.
 
+The published offer uses Stripe-hosted Payment Links for three one-time purchases. The site contains no Stripe secret keys, embedded payment form, subscription price, or payment-processing backend.
+
 ## Supported runtime
 
 Node.js 22 LTS or newer is required. CI uses Node 22. Dependency versions are pinned in `package.json` and the lockfile.

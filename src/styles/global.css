@@ -489,6 +489,50 @@ a {
   font-family: var(--serif);
   font-size: 1.6rem;
 }
+.purchase-options {
+  display: grid;
+  width: 100%;
+  border-top: 1px solid #9caec1;
+}
+.purchase-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #9caec1;
+  color: var(--gtp-deep);
+  text-decoration: none;
+}
+.purchase-option span {
+  display: grid;
+  gap: 0.25rem;
+}
+.purchase-option strong {
+  font-size: 1.05rem;
+}
+.purchase-option small {
+  max-width: 34rem;
+  color: #53677e;
+  line-height: 1.45;
+}
+.purchase-option b {
+  flex: 0 0 auto;
+  color: var(--gtp-blue);
+  font-family: var(--serif);
+  font-size: 1.35rem;
+}
+.purchase-option:hover strong,
+.purchase-option:focus-visible strong {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.offer-action > .checkout-note {
+  margin: 0;
+  color: #53677e;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
 
 /* About and 404 */
 .about-page,

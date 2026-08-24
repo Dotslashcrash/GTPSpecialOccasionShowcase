@@ -15,3 +15,5 @@
 - A formatting command referenced the conventional but nonexistent `format:write` script. The repository's actual `format` script was used immediately afterward.
 - MCPP resource-group creation succeeded, but the first Static Web App creation attempt stopped with `MissingSubscriptionRegistration` because the subscription had not yet registered the `Microsoft.Web` resource provider. Registration was initiated in the verified MCPP subscription before retrying the app creation.
 - The first commit attempt stopped because this new repository had no Git author identity configured. A repository-local GitHub-compatible identity was configured; no global Git settings were changed.
+- The first live-header check used PowerShell's reserved `$HOME` variable name and stopped before making the checks. It was rerun with a task-specific variable name.
+- Two exploratory browser-visual calls used unsupported convenience methods for waiting and screenshots. The supported tab screenshot method and a short transition wait were then used; the live homepage and opened admin workspace rendered correctly.

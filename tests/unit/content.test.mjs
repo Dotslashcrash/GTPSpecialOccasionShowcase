@@ -27,6 +27,11 @@ test('central offer matches the approved one-time package', () => {
     site.offerUrl,
     'https://www.griffintechnologypartners.com/web-services/special-occasion-sites',
   );
+  assert.deepEqual(
+    site.purchaseOptions.map(({ price }) => price),
+    ['$149.99', '$49.99', '$449.99'],
+  );
+  assert.ok(site.purchaseOptions.every(({ url }) => url.startsWith('https://buy.stripe.com/')));
 });
 
 test('all people and sample organizations are identified as fictional in site framing', () => {

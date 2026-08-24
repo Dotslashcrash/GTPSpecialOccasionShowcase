@@ -17,8 +17,13 @@ test('all internal links resolve and approved external destinations are used', a
   }
   const external = hrefs.filter((item) => item.startsWith('http'));
   expect(
-    external.every((href) => href.startsWith('https://www.griffintechnologypartners.com/')),
+    external.every(
+      (href) =>
+        href.startsWith('https://www.griffintechnologypartners.com/') ||
+        href.startsWith('https://buy.stripe.com/'),
+    ),
   ).toBe(true);
+  expect(external.filter((href) => href.startsWith('https://buy.stripe.com/'))).toHaveLength(3);
 });
 
 test('forms in public samples do not transmit data', async ({ page }) => {

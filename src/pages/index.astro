@@ -150,7 +150,22 @@ import { site } from '../content/site';
       <div class="offer-action">
         <p>
           Every site is customized around the people, purpose, and practical needs of the moment.
-        </p><a class="button" href={site.offerUrl}>Start your special occasion site</a><a
+        </p>
+        <div class="purchase-options" aria-label="One-time Stripe checkout options">
+          {
+            site.purchaseOptions.map((option) => (
+              <a class="purchase-option" href={option.url}>
+                <span>
+                  <strong>{option.name}</strong>
+                  <small>{option.detail}</small>
+                </span>
+                <b>{option.price}</b>
+              </a>
+            ))
+          }
+        </div>
+        <p class="checkout-note">Secure one-time checkout through Stripe. No subscription.</p>
+        <a class="text-link" href={site.offerUrl}>Review the complete offer</a><a
           class="text-link"
           href={`mailto:${site.salesEmail}`}>Or email {site.salesEmail}</a
         >

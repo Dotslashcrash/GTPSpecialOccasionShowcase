@@ -24,6 +24,10 @@ The portal serializes only fictional demonstration state to `localStorage`. Loca
 
 The portal is openly labeled as a portfolio preview. It is not presented as authentication. Real customer administration would be implemented separately and protected for customer-approved users. Static security headers deny framing, block plugins, restrict scripts and connections to the same origin, and disable sensitive browser permissions.
 
+## Payments
+
+The portfolio links to three Stripe-hosted Payment Links stored in the typed site configuration. Checkout is external to the static app, all three prices are one-time, and no Stripe API key or payment data enters the client bundle.
+
 ## Design system
 
 The portfolio shell uses GTP blue, silver, black, and white. Each sample has its own tokens and structural identity: cinematic, hearth, editorial, archive, scrapbook, manifesto, folio, field guide, letter, service, reveal, or storybook. Shared accessibility primitives keep focus treatment, reduced motion, touch targets, and semantic structure consistent.
