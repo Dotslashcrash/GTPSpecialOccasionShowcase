@@ -401,7 +401,7 @@ const baseOccasions: BaseOccasion[] = [
     theme: 'gold-plum',
     layout: 'scrapbook',
     mood: 'Warm · nostalgic · celebratory',
-    heroImage: '/media/anniversaries-hero.webp',
+    heroImage: '/media/anniversaries-hero-wide.webp',
     detailImage: '/media/anniversaries-detail.webp',
     heroAlt: 'An older couple smiling at each other outdoors with both heads fully visible',
     detailAlt: 'A smiling couple together at a formal anniversary celebration',

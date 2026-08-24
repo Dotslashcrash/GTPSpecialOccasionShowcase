@@ -13,7 +13,10 @@ const getRequiredOccasion = (slug: string) => {
 };
 const featuredWedding = getRequiredOccasion('weddings');
 const featuredReunion = getRequiredOccasion('reunions');
-const homeImage = (slug: string, width: 480 | 800 | 1200) => `/media/home/${slug}-${width}.webp`;
+const homeImage = (slug: string, width: 480 | 800 | 1200) => {
+  const imageSlug = slug === 'anniversaries' ? 'anniversaries-wide' : slug;
+  return `/media/home/${imageSlug}-${width}.webp`;
+};
 const homeSrcset = (slug: string) =>
   `${homeImage(slug, 480)} 480w, ${homeImage(slug, 800)} 800w, ${homeImage(slug, 1200)} 1200w`;
 const faqItems = [
