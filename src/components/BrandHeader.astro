@@ -1,0 +1,19 @@
+---
+import { site } from '../content/site';
+const { compact = false } = Astro.props;
+---
+
+<header class:list={['brand-header', { compact }]}>
+  <a class="brand-mark" href="/" aria-label="GTP Special Occasion Websites home">
+    <span aria-hidden="true">GTP</span>
+    <strong>Special Occasion Websites</strong>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="brand-nav"
+    >Menu</button
+  >
+  <nav id="brand-nav" aria-label="Primary navigation">
+    <a href="/#occasions">Explore occasions</a>
+    <a href="/about-the-demos">About the demos</a>
+    <a class="button button-small" href={site.offerUrl}>Start your site</a>
+  </nav>
+</header>

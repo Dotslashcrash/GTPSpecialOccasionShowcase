@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SampleExperience from '../../../components/SampleExperience.astro';
+import { occasions, type Occasion } from '../../../content/occasions';
+
+export function getStaticPaths() {
+  return occasions.map((occasion) => ({
+    params: { occasion: occasion.slug },
+    props: { occasion },
+  }));
+}
+
+const { occasion } = Astro.props as { occasion: Occasion };
+---
+
+<BaseLayout
+  title={`${occasion.sampleName} | Fictional ${occasion.category} Website Sample`}
+  description={occasion.shortDescription}
+  canonicalPath={`/samples/${occasion.slug}`}
+  image={occasion.heroImage}
+  pageClass={`occasion-page ${occasion.theme}`}
+>
+  <SampleExperience occasion={occasion} />
+</BaseLayout>

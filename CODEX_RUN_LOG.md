@@ -1,0 +1,17 @@
+# Codex run log
+
+## 2026-08-23
+
+- Initial `swa --version` check failed because the Azure Static Web Apps CLI was not installed. Installed `@azure/static-web-apps-cli@2.0.8` globally after user authorization; verified `swa 2.0.8`.
+- `npm whoami` returned `ENEEDAUTH`. This is non-blocking because the project installs public packages and does not publish to npm.
+- The first stock-image download batch stopped when one recalled Unsplash image identifier returned HTTP 404. Existing successful downloads were preserved; the missing image was replaced with a currently accessible Unsplash asset and the batch completed.
+- The first dependency install failed because `@astrojs/check@0.9.6` declares TypeScript `^5.0.0`, while the initially selected current TypeScript was 7.0.2. No override was used; TypeScript was pinned to the latest compatible 5.x release, 5.9.3.
+- The first production build stopped because Astro requires an explicit `is:inline` marker when a component references a file already stored under `public/`. The admin-preview script reference was marked explicitly so Astro copies and serves it unchanged from the same origin.
+- Playwright's first two launches reported that its configured web server exited early. Astro 7's preview command starts a managed background preview process and returns, which does not satisfy Playwright's long-running process contract. Test configuration now uses the bundled Vite preview server in the foreground; the managed Astro preview was stopped before retrying.
+- Vite preview treated clean deep links as SPA fallbacks, so interaction tests received the homepage instead of the built nested HTML files. The first browser run therefore passed route-status checks but failed 20 interaction assertions. Playwright now runs against the installed Azure Static Web Apps emulator, which honors `staticwebapp.config.json` and physical route directories. The GitHub job key was aligned with the emulator's conventional workflow parser.
+- The next emulator run correctly reached every deep route and passed all 12 portal interaction journeys, but its strict CSP exposed Astro's default inlining of small processed scripts. Public navigation, filtering, RSVP, reveal, and sharing behavior was consolidated into a same-origin static script so `script-src 'self'` remains strict without `unsafe-inline`.
+- The first Lighthouse batch attempted six concurrent audits and one Windows Lighthouse temporary-directory cleanup failed with `EPERM`. No project files were affected. Audits were rerun serially to avoid shared temporary-directory contention.
+- Windows `System.Drawing` could not inspect WebP dimensions because its installed codec does not support these files. File sizes remained available, and Lighthouse network diagnostics provided the needed optimization evidence.
+- A formatting command referenced the conventional but nonexistent `format:write` script. The repository's actual `format` script was used immediately afterward.
+- MCPP resource-group creation succeeded, but the first Static Web App creation attempt stopped with `MissingSubscriptionRegistration` because the subscription had not yet registered the `Microsoft.Web` resource provider. Registration was initiated in the verified MCPP subscription before retrying the app creation.
+- The first commit attempt stopped because this new repository had no Git author identity configured. A repository-local GitHub-compatible identity was configured; no global Git settings were changed.

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zealous-flower-0d3d54610.7.azurestaticapps.net/sitemap-index.xml

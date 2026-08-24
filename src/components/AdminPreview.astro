@@ -1,0 +1,316 @@
+---
+import type { Occasion } from '../content/occasions';
+const { occasion } = Astro.props as { occasion: Occasion };
+const previewData = {
+  slug: occasion.slug,
+  title: occasion.title,
+  intro: occasion.introduction,
+  date: occasion.dateValue,
+  location: occasion.details[0]?.value ?? '',
+  modules: occasion.portalModules.map((name, index) => ({
+    id: `${occasion.slug}-${index}`,
+    name,
+    visible: true,
+  })),
+  timeline: occasion.timeline,
+  messages: occasion.messages,
+  resources: occasion.resources,
+  gallery: [occasion.heroImage, occasion.detailImage],
+};
+---
+
+<div class="portal" data-portal={occasion.slug}>
+  <div class="portal-entry" data-entry>
+    <div class="entry-card">
+      <span class="portal-logo" aria-hidden="true">GTP</span>
+      <p>Fictional {occasion.category} client portal</p>
+      <h1>See how the experience is managed.</h1>
+      <p>
+        Explore real browser-only editing controls using sample data. No login or personal
+        information is required.
+      </p>
+      <button type="button" class="button" data-enter>Enter Interactive Admin Preview</button>
+      <a href={`/samples/${occasion.slug}`}>Return to the guest experience</a>
+    </div>
+  </div>
+
+  <header class="portal-topbar">
+    <a class="portal-brand" href="/"><span>GTP</span><strong>Occasion Studio</strong></a>
+    <div class="portal-context">
+      <span>Portfolio preview</span><strong>{occasion.sampleName}</strong>
+    </div>
+    <div class="portal-actions">
+      <a href={`/samples/${occasion.slug}`} target="_blank"
+        >Open public sample <span class="sr-only">in a new tab</span></a
+      >
+      <button type="button" data-reset>Reset demo</button>
+    </div>
+  </header>
+
+  <div class="demo-notice" role="note">
+    <strong>Interactive portfolio preview.</strong> Sample data is stored only in this browser and is
+    not submitted to GTP. Real customer portals are protected and configured for approved users.
+  </div>
+
+  <aside class="portal-sidebar">
+    <p class="sidebar-label">Workspace</p>
+    <nav aria-label="Portal preview sections">
+      <button class="active" type="button" data-panel-target="overview" aria-current="page"
+        ><span aria-hidden="true">⌂</span>Overview</button
+      >
+      <button type="button" data-panel-target="content"
+        ><span aria-hidden="true">✎</span>Page content</button
+      >
+      <button type="button" data-panel-target="sections"
+        ><span aria-hidden="true">↕</span>Sections</button
+      >
+      <button type="button" data-panel-target="timeline"
+        ><span aria-hidden="true">◷</span>{
+          occasion.slug === 'funerals'
+            ? 'Service order'
+            : occasion.slug === 'reunions'
+              ? 'Schedule'
+              : 'Timeline'
+        }</button
+      >
+      <button type="button" data-panel-target="gallery"
+        ><span aria-hidden="true">▧</span>Gallery</button
+      >
+      <button type="button" data-panel-target="messages"
+        ><span aria-hidden="true">✉</span>{
+          [
+            'weddings',
+            'holidays',
+            'graduations',
+            'retirements',
+            'reunions',
+            'baby-showers',
+          ].includes(occasion.slug)
+            ? 'Guests & replies'
+            : 'Guest messages'
+        }</button
+      >
+      <button type="button" data-panel-target="resources"
+        ><span aria-hidden="true">↗</span>{occasion.resources[0]?.kind ?? 'Resources'}</button
+      >
+    </nav>
+    <div class="sidebar-security">
+      <span aria-hidden="true">◇</span><p>
+        <strong>In a customer portal</strong>Approved users sign in before reaching this workspace.
+      </p>
+    </div>
+  </aside>
+
+  <main id="main-content" class="portal-workspace">
+    <div class="workspace-heading">
+      <div><p>{occasion.category} workspace</p><h2 data-workspace-title>Overview</h2></div><span
+        class="save-indicator"
+        data-save-indicator
+        aria-live="polite">Demo ready</span
+      >
+    </div>
+
+    <section class="portal-panel active" data-panel="overview">
+      <div class="overview-grid">
+        <article class="welcome-panel">
+          <p>Good afternoon</p><h3>{occasion.sampleName}</h3><p>
+            Use this preview to edit the story, organize sections, review contributions, and see the
+            public experience update beside your work.
+          </p><button type="button" data-jump="content">Edit the opening</button>
+        </article>
+        <article class="preview-panel">
+          <div class="preview-toolbar">
+            <strong>Live browser preview</strong><div role="group" aria-label="Preview size">
+              <button class="active" type="button" data-device="desktop" aria-pressed="true"
+                >Desktop</button
+              ><button type="button" data-device="mobile" aria-pressed="false">Mobile</button>
+            </div>
+          </div><div class="preview-frame" data-preview-frame>
+            <div class="mini-site">
+              <span>{occasion.category}</span><h3 data-preview-title>{occasion.title}</h3><p
+                data-preview-intro
+              >
+                {occasion.introduction}
+              </p><small data-preview-date>{occasion.dateValue}</small><a
+                href={`/samples/${occasion.slug}`}>Full guest experience</a
+              >
+            </div>
+          </div>
+        </article>
+        <article class="status-panel">
+          <h3>Ready to manage</h3><dl>
+            <div>
+              <dt>Visible sections</dt><dd data-visible-count>{occasion.portalModules.length}</dd>
+            </div><div><dt>Gallery images</dt><dd data-gallery-count>2</dd></div><div>
+              <dt>Awaiting review</dt><dd data-pending-count>
+                {occasion.messages.filter((m) => m.status === 'Pending').length}
+              </dd>
+            </div>
+          </dl>
+        </article>
+        <article class="next-panel">
+          <p>Suggested next step</p><h3>Review new guest messages</h3><button
+            type="button"
+            data-jump="messages">Open moderation queue</button
+          >
+        </article>
+      </div>
+    </section>
+
+    <section class="portal-panel" data-panel="content" hidden>
+      <div class="panel-heading">
+        <div>
+          <p>Public introduction</p><h3>Opening content</h3><p>
+            Changes appear in the preview and stay in this browser.
+          </p>
+        </div>
+      </div>
+      <form class="editor-form" data-content-form>
+        <label
+          >Page title<input name="title" required maxlength="100" value={occasion.title} /></label
+        >
+        <label
+          >Introductory copy<textarea name="intro" required maxlength="400" rows="6"
+            >{occasion.introduction}</textarea
+          ><small
+            ><span data-character-count>{occasion.introduction.length}</span>/400 characters</small
+          ></label
+        >
+        <div class="form-row">
+          <label
+            >{occasion.dateLabel}<input name="date" required value={occasion.dateValue} /></label
+          ><label
+            >Primary detail<input
+              name="location"
+              required
+              value={occasion.details[0]?.value}
+            /></label
+          >
+        </div>
+        <div class="form-actions">
+          <button class="button" type="submit">Save to this demo</button><button
+            type="button"
+            data-undo-content>Undo unsaved edits</button
+          >
+        </div>
+      </form>
+    </section>
+
+    <section class="portal-panel" data-panel="sections" hidden>
+      <div class="panel-heading">
+        <div>
+          <p>Public page flow</p><h3>Sections and visibility</h3><p>
+            Move sections into the right order and hide anything that is not ready.
+          </p>
+        </div>
+      </div>
+      <ul class="section-manager" data-section-list></ul>
+    </section>
+
+    <section class="portal-panel" data-panel="timeline" hidden>
+      <div class="panel-heading">
+        <div>
+          <p>{occasion.slug === 'funerals' ? 'Service flow' : 'Story structure'}</p><h3>
+            {
+              occasion.slug === 'funerals'
+                ? 'Order of service'
+                : occasion.slug === 'reunions'
+                  ? 'Weekend schedule'
+                  : 'Timeline items'
+            }
+          </h3><p>Add, edit, or remove browser-only sample entries.</p>
+        </div><button class="button" type="button" data-add-timeline>Add item</button>
+      </div>
+      <div class="timeline-manager" data-timeline-list></div>
+    </section>
+
+    <section class="portal-panel" data-panel="gallery" hidden>
+      <div class="panel-heading">
+        <div>
+          <p>Approved media</p><h3>Gallery previews</h3><p>
+            Local files are previewed with FileReader and never uploaded.
+          </p>
+        </div><label class="button upload-label"
+          >Add local image<input
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/avif"
+            data-gallery-upload
+          /></label
+        >
+      </div>
+      <div class="gallery-manager" data-gallery-list></div>
+      <div class="empty-state" data-gallery-empty hidden>
+        <span aria-hidden="true">□</span><h4>No gallery previews yet</h4><p>
+          Add an image from this device to see it here. It will remain in this browser only.
+        </p>
+      </div>
+    </section>
+
+    <section class="portal-panel" data-panel="messages" hidden>
+      <div class="panel-heading">
+        <div>
+          <p>Review queue</p><h3>
+            {
+              [
+                'weddings',
+                'holidays',
+                'graduations',
+                'retirements',
+                'reunions',
+                'baby-showers',
+              ].includes(occasion.slug)
+                ? 'Guest replies and messages'
+                : 'Guest messages'
+            }
+          </h3><p>Approve or remove the fictional sample contributions below.</p>
+        </div>
+      </div>
+      <div class="message-manager" data-message-list></div>
+      <aside class="rsvp-drawer">
+        <h4>Fictional RSVP snapshot</h4><ul>
+          <li><strong>18</strong> Attending</li><li><strong>4</strong> Awaiting reply</li><li>
+            <strong>2</strong> Sending wishes
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="portal-panel" data-panel="resources" hidden>
+      <div class="panel-heading">
+        <div>
+          <p>Useful destinations</p><h3>{occasion.resources[0]?.kind ?? 'Resource'} links</h3><p>
+            Update labels and URLs used by this local preview.
+          </p>
+        </div>
+      </div>
+      <form class="resource-manager" data-resource-form></form>
+    </section>
+  </main>
+
+  <dialog class="portal-dialog" data-timeline-dialog aria-labelledby="timeline-dialog-title">
+    <form method="dialog" data-timeline-form>
+      <div class="dialog-heading">
+        <div>
+          <p>Browser-only item</p><h2 id="timeline-dialog-title">Add timeline item</h2>
+        </div><button type="button" data-close-dialog aria-label="Close dialog">×</button>
+      </div><input type="hidden" name="index" value="" /><label
+        >When<input name="year" required maxlength="30" /></label
+      ><label>Title<input name="title" required maxlength="80" /></label><label
+        >Short description<textarea name="body" required maxlength="180" rows="4"></textarea></label
+      ><div class="form-actions">
+        <button class="button" value="save" type="submit">Save item</button><button
+          value="cancel"
+          type="button"
+          data-close-dialog>Cancel</button
+        >
+      </div>
+    </form>
+  </dialog>
+  <script
+    is:inline
+    id="occasion-data"
+    type="application/json"
+    set:html={JSON.stringify(previewData).replace(/</g, '\\u003c')}
+  />
+  <script is:inline src="/scripts/admin-preview.js"></script>
+</div>

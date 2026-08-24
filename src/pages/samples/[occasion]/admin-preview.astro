@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AdminPreview from '../../../components/AdminPreview.astro';
+import { occasions, type Occasion } from '../../../content/occasions';
+export function getStaticPaths() {
+  return occasions.map((occasion) => ({
+    params: { occasion: occasion.slug },
+    props: { occasion },
+  }));
+}
+const { occasion } = Astro.props as { occasion: Occasion };
+---
+
+<BaseLayout
+  title={`${occasion.category} Client Portal Preview | Griffin Technology Partners`}
+  description={`Explore a public, browser-only interactive administration preview tailored to the fictional ${occasion.sampleName} experience.`}
+  canonicalPath={`/samples/${occasion.slug}/admin-preview`}
+  pageClass="portal-page"
+>
+  <AdminPreview occasion={occasion} />
+</BaseLayout>

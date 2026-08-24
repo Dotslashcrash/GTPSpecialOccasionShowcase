@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrandHeader from '../components/BrandHeader.astro';
+import BrandFooter from '../components/BrandFooter.astro';
+---
+
+<BaseLayout
+  title="Page Not Found | GTP Special Occasion Websites"
+  description="The page you requested could not be found."
+  canonicalPath="/404"
+>
+  <BrandHeader />
+  <main id="main-content" class="not-found">
+    <p class="eyebrow">404 · A page between moments</p><h1>
+      This address does not lead to a sample.
+    </h1><p>The occasion may have moved, or the link may have been copied incorrectly.</p><a
+      class="button"
+      href="/">Explore the portfolio</a
+    >
+  </main>
+  <BrandFooter />
+</BaseLayout>

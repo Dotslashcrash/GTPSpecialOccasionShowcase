@@ -1,0 +1,269 @@
+---
+import type { Occasion } from '../content/occasions';
+import Countdown from './Countdown.astro';
+import ShareButton from './ShareButton.astro';
+
+const { occasion } = Astro.props as { occasion: Occasion };
+const isQuiet = ['memorials', 'funerals'].includes(occasion.slug);
+const hasCountdown = !['memorials', 'funerals', 'retirements'].includes(occasion.slug);
+---
+
+<div
+  class={`sample sample-${occasion.theme} layout-${occasion.layout}`}
+  data-occasion={occasion.slug}
+>
+  <a class="sample-back" href="/">GTP portfolio <span aria-hidden="true">↗</span></a>
+  <header class="sample-nav">
+    <a class="sample-monogram" href="#sample-top" aria-label={`${occasion.sampleName} home`}>
+      <span aria-hidden="true">{occasion.sampleName.charAt(0)}</span>
+      <strong>{occasion.sampleName}</strong>
+    </a>
+    <nav aria-label={`${occasion.category} sample navigation`}>
+      {
+        occasion.sections.map((section, index) => (
+          <a href={`#story-${index + 1}`}>{section.eyebrow}</a>
+        ))
+      }
+      <a href="#details">Details</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="sample-hero" id="sample-top" aria-labelledby="sample-title">
+      <div class="sample-hero-copy">
+        <p class="sample-kicker">
+          A fictional {occasion.category.toLowerCase()} website experience
+        </p>
+        <h1 id="sample-title">{occasion.title}</h1>
+        <p class="sample-intro">{occasion.introduction}</p>
+        <div class="sample-actions">
+          <a class="sample-primary" href="#details">See the details</a>
+          <a href={`/samples/${occasion.slug}/admin-preview`}>Enter Interactive Admin Preview</a>
+        </div>
+      </div>
+      <figure class="sample-hero-image">
+        <img src={occasion.heroImage} alt={occasion.heroAlt} width="1100" height="820" />
+        <figcaption>{occasion.dateValue}</figcaption>
+      </figure>
+      {
+        occasion.layout === 'cinematic' && (
+          <div class="hero-number" aria-hidden="true">
+            40
+          </div>
+        )
+      }
+      {
+        occasion.layout === 'editorial' && (
+          <p class="hero-side-note">
+            An autumn promise
+            <br />
+            beside the water
+          </p>
+        )
+      }
+      {
+        occasion.layout === 'reveal' && (
+          <button class="reveal-button" type="button" aria-expanded="false" data-reveal>
+            Open the news
+          </button>
+        )
+      }
+    </section>
+
+    {
+      hasCountdown && (
+        <section class="sample-countdown">
+          <>
+            <p>{occasion.dateLabel}</p>
+            <strong>{occasion.dateValue}</strong>
+            <Countdown label={`Sample countdown for ${occasion.sampleName}`} />
+          </>
+        </section>
+      )
+    }
+
+    <section class="sample-statement" id="story-1">
+      <div>
+        <p>{occasion.sections[0]?.eyebrow}</p>
+        <h2>{occasion.sections[0]?.title}</h2>
+      </div>
+      <div>
+        <p>{occasion.sections[0]?.body}</p>
+        {
+          occasion.sections[0]?.items && (
+            <ul>
+              {occasion.sections[0].items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="sample-photo-story" id="story-2">
+      <figure>
+        <img
+          src={occasion.detailImage}
+          alt={occasion.detailAlt}
+          width="900"
+          height="760"
+          loading="lazy"
+        />
+      </figure>
+      <div>
+        <p>{occasion.sections[1]?.eyebrow}</p>
+        <h2>{occasion.sections[1]?.title}</h2>
+        <p>{occasion.sections[1]?.body}</p>
+        {
+          occasion.sections[1]?.items && (
+            <ol>
+              {occasion.sections[1].items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ol>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="sample-timeline" aria-labelledby="timeline-title">
+      <p>
+        {
+          occasion.slug === 'funerals'
+            ? 'Service sequence'
+            : occasion.slug === 'reunions'
+              ? 'Weekend guide'
+              : 'A few chapters'
+        }
+      </p>
+      <h2 id="timeline-title">
+        {
+          occasion.slug === 'birthdays'
+            ? 'Life, in bright moments'
+            : occasion.slug === 'memorials'
+              ? 'A life, carefully kept'
+              : occasion.slug === 'retirements'
+                ? 'Work that moved things forward'
+                : 'The story so far'
+        }
+      </h2>
+      <div class="timeline-track">
+        {
+          occasion.timeline.map((item) => (
+            <article>
+              <>
+                <strong>{item.year}</strong>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sample-third" id="story-3">
+      <p>{occasion.sections[2]?.eyebrow}</p>
+      <h2>{occasion.sections[2]?.title}</h2>
+      <p>{occasion.sections[2]?.body}</p>
+      {
+        occasion.sections[2]?.items && (
+          <ul>
+            {occasion.sections[2].items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    <section class="sample-details" id="details" aria-labelledby="details-title">
+      <div class="details-heading">
+        <p>{occasion.dateLabel}</p><h2 id="details-title">{occasion.dateValue}</h2>
+      </div>
+      <dl>
+        {
+          occasion.details.map((detail) => (
+            <div>
+              <>
+                <dt>{detail.label}</dt>
+                <dd>{detail.value}</dd>
+              </>
+            </div>
+          ))
+        }
+      </dl>
+      {
+        !isQuiet && (
+          <form class="rsvp-demo" data-rsvp-demo>
+            <>
+              <h3>RSVP demonstration</h3>
+              <p>No information leaves this browser.</p>
+              <label for={`rsvp-${occasion.slug}`}>Sample response</label>
+              <select id={`rsvp-${occasion.slug}`}>
+                <>
+                  <option>Choose a response</option>
+                  <option>Joyfully attending</option>
+                  <option>Sending warm wishes</option>
+                </>
+              </select>
+              <button type="submit">Save sample response</button>
+              <p class="rsvp-status" aria-live="polite" />
+            </>
+          </form>
+        )
+      }
+    </section>
+
+    <section class="sample-messages" aria-labelledby="messages-title">
+      <div><p>Words from the circle</p><h2 id="messages-title">Messages worth keeping.</h2></div>
+      <div>
+        {
+          occasion.messages
+            .filter((message) => message.status === 'Approved')
+            .map((message) => (
+              <blockquote>
+                <>
+                  <p>“{message.message}”</p>
+                  <footer>
+                    {message.name} · {message.relationship}
+                  </footer>
+                </>
+              </blockquote>
+            ))
+        }
+      </div>
+    </section>
+
+    <section class="sample-resources" aria-labelledby="resources-title">
+      <div><p>Helpful links</p><h2 id="resources-title">Everything in one place.</h2></div>
+      <ul>
+        {
+          occasion.resources.map((resource) => (
+            <li>
+              <>
+                <span>{resource.kind}</span>
+                <strong>{resource.label}</strong>
+                <small>{resource.value}</small>
+              </>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="sample-share">
+      <h2>Keep the people you love close to the moment.</h2><div>
+        <ShareButton /><a href={`/samples/${occasion.slug}/admin-preview`}
+          >Preview how this site is managed</a
+        >
+      </div>
+    </section>
+  </main>
+  <footer class="sample-footer">
+    <p>This is a fictional portfolio example created by Griffin Technology Partners.</p><a href="/"
+      >Explore every occasion</a
+    >
+  </footer>
+</div>

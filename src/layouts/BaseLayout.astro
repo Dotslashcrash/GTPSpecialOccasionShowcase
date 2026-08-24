@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+import { site } from '../content/site';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  image?: string;
+  pageClass?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalPath = '/',
+  image = '/social-preview.svg',
+  pageClass = '',
+} = Astro.props;
+const canonical = new URL(canonicalPath, site.baseUrl);
+const imageUrl = new URL(image, site.baseUrl);
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.company,
+  url: 'https://www.griffintechnologypartners.com',
+  email: site.salesEmail,
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#071529" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(organization)} />
+    <title>{title}</title>
+  </head>
+  <body class={pageClass}>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <slot />
+    <script is:inline src="/scripts/site.js"></script>
+  </body>
+</html>
