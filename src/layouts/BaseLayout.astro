@@ -8,6 +8,7 @@ interface Props {
   canonicalPath?: string;
   image?: string;
   pageClass?: string;
+  robots?: string;
 }
 
 const {
@@ -16,6 +17,7 @@ const {
   canonicalPath = '/',
   image = '/social-preview.svg',
   pageClass = '',
+  robots = 'index,follow,max-image-preview:large',
 } = Astro.props;
 const canonical = new URL(canonicalPath, site.baseUrl);
 const imageUrl = new URL(image, site.baseUrl);
@@ -24,6 +26,7 @@ const organization = {
   '@type': 'Organization',
   name: site.company,
   url: 'https://www.griffintechnologypartners.com',
+  logo: 'https://www.griffintechnologypartners.com/assets/griffin-lockup.jpg',
   email: site.salesEmail,
 };
 ---
@@ -33,10 +36,11 @@ const organization = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content="#071529" />
+    <meta name="theme-color" content="#080d16" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/brand/griffin-mark-160.webp" type="image/webp" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={title} />

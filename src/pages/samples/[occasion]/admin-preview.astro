@@ -16,6 +16,7 @@ const { occasion } = Astro.props as { occasion: Occasion };
   description={`Explore a public, browser-only interactive administration preview tailored to the fictional ${occasion.sampleName} experience.`}
   canonicalPath={`/samples/${occasion.slug}/admin-preview`}
   pageClass="portal-page"
+  robots="noindex,follow"
 >
   <AdminPreview occasion={occasion} />
 </BaseLayout>

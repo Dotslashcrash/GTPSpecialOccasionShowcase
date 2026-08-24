@@ -33,6 +33,12 @@ for (const route of routes) {
     if (/^\/samples\/[^/]+$/.test(route)) {
       await expect(page.locator('[data-public-gallery] .gallery-grid img')).toHaveCount(6);
     }
+    if (route.endsWith('/admin-preview')) {
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+        'content',
+        'noindex,follow',
+      );
+    }
     const results = await new AxeBuilder({ page }).analyze();
     expect(
       results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? '')),
@@ -55,6 +61,25 @@ test('homepage filters and every sample destination are present', async ({ page 
     await expect(page.locator(`a[href="/samples/${slug}"]`).first()).toBeVisible();
     await expect(page.locator(`a[href="/samples/${slug}/admin-preview"]`).first()).toHaveCount(1);
   }
+});
+
+test('homepage carries the GTP brand and complete one-time offer', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.brand-mark img')).toHaveAttribute(
+    'src',
+    '/brand/griffin-mark-160.webp',
+  );
+  await expect(
+    page.getByRole('heading', { name: 'Turn the moment into a place everyone can visit.' }),
+  ).toBeVisible();
+  await expect(page.getByText('One time. No subscription.')).toBeVisible();
+  const checkoutLinks = await page
+    .locator('a[href^="https://buy.stripe.com/"]')
+    .evaluateAll((links) => [...new Set(links.map((link) => link.getAttribute('href')))]);
+  expect(checkoutLinks).toHaveLength(3);
+  await expect(page.locator('[data-filter-result]')).toHaveText('Showing all 12 experiences.');
+  await page.getByRole('button', { name: 'Remember' }).click();
+  await expect(page.locator('[data-filter-result]')).toHaveText('Showing 2 remember experiences.');
 });
 
 for (const slug of slugs) {

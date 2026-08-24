@@ -4,7 +4,7 @@ export const site = {
   baseUrl: 'https://occasions.griffintechnologypartners.com',
   offerUrl: 'https://www.griffintechnologypartners.com/web-services/special-occasion-sites',
   salesEmail: 'sales@griffintechnologypartners.com',
-  hero: 'Give the moment its own place online.',
+  hero: 'Turn the moment into a place everyone can visit.',
   price: '$149.99',
   billing: 'one-time starting package',
   inclusions: [

@@ -4,43 +4,213 @@ import BrandHeader from '../components/BrandHeader.astro';
 import BrandFooter from '../components/BrandFooter.astro';
 import { occasions } from '../content/occasions';
 import { site } from '../content/site';
+
+const getRequiredOccasion = (slug: string) => {
+  const occasion = occasions.find((item) => item.slug === slug);
+  if (!occasion) throw new Error(`Missing required occasion: ${slug}`);
+  return occasion;
+};
+const featuredBirthday = getRequiredOccasion('birthdays');
+const featuredWedding = getRequiredOccasion('weddings');
+const featuredMemorial = getRequiredOccasion('memorials');
+const featuredOccasions = [featuredBirthday, featuredWedding, featuredMemorial];
+const heroOccasions = [featuredWedding, getRequiredOccasion('reunions'), featuredBirthday];
+const homeImage = (slug: string, width: 480 | 800 | 1200) => `/media/home/${slug}-${width}.webp`;
+const homeSrcset = (slug: string) =>
+  `${homeImage(slug, 480)} 480w, ${homeImage(slug, 800)} 800w, ${homeImage(slug, 1200)} 1200w`;
+const faqItems = [
+  {
+    question: 'Is every special-occasion website custom?',
+    answer:
+      'Yes. These examples demonstrate possible directions, but GTP shapes the visual language, content, photographs, and practical features around your approved occasion details.',
+  },
+  {
+    question: 'What is included in the $149.99 starting package?',
+    answer:
+      'The one-time starting package includes one custom special-occasion website, one standard available domain, a protected client portal, and 30 days of managed hosting after launch.',
+  },
+  {
+    question: 'Can I keep the website online longer?',
+    answer:
+      'Yes. Add another 30 days for $49.99 or one year for $449.99. Both extensions are one-time purchases, not subscriptions.',
+  },
+  {
+    question: 'Are the client portal previews real customer accounts?',
+    answer:
+      'No. The public previews are browser-only demonstrations with fictional content. Finished customer portals are protected and configured for approved users.',
+  },
+];
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: site.baseUrl,
+    publisher: { '@type': 'Organization', name: site.company },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Custom Special Occasion Website',
+    description:
+      'A custom special-occasion website with a standard available domain, protected client portal, and 30 days of managed hosting.',
+    brand: { '@type': 'Brand', name: site.company },
+    offers: {
+      '@type': 'Offer',
+      price: '149.99',
+      priceCurrency: 'USD',
+      url: site.purchaseOptions[0].url,
+      availability: 'https://schema.org/InStock',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Special occasion website examples',
+    numberOfItems: occasions.length,
+    itemListElement: occasions.map((occasion, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `${occasion.category} website example`,
+      url: `${site.baseUrl}/samples/${occasion.slug}`,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  },
+];
 ---
 
 <BaseLayout
-  title="Special Occasion Website Portfolio | Griffin Technology Partners"
-  description="Explore twelve custom website and client-portal experiences for celebrations, announcements, gatherings, and remembrance."
+  title="Custom Special Occasion Websites | 12 Live Examples | Griffin Technology Partners"
+  description="Explore 12 custom websites for birthdays, weddings, memorials, announcements, reunions, and more. One-time packages from Griffin Technology Partners start at $149.99."
 >
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <BrandHeader />
   <main id="main-content">
-    <section class="portfolio-hero">
+    <section class="cinematic-hero">
+      <div class="cinematic-wash" aria-hidden="true"></div>
       <div class="hero-copy">
-        <p class="eyebrow">Custom occasion websites by GTP</p>
+        <p class="eyebrow">Custom special-occasion websites by Griffin Technology Partners</p>
         <h1>{site.hero}</h1>
         <p class="lede">
-          A celebration, announcement, gathering, or remembrance deserves more than a generic event
-          page. We design a distinct public experience and a practical place for you to manage it.
+          From joyful milestones to lasting tributes, GTP creates a cinematic, shareable website
+          built around your photographs, people, plans, and story—starting at {site.price} one time.
         </p>
         <div class="hero-actions">
-          <a class="button" href="#occasions">Explore 12 experiences</a>
-          <a class="text-link" href={site.offerUrl}
-            >See the {site.price} starting package <span aria-hidden="true">→</span></a
+          <a class="button button-crimson" href={site.purchaseOptions[0].url}
+            >Start yours · {site.price}</a
           >
+          <a class="button button-ghost" href="#occasions">Explore 12 live examples</a>
         </div>
+        <ul class="hero-proof" aria-label="Starting package highlights">
+          <li>Custom design</li>
+          <li>Standard domain</li>
+          <li>Protected client portal</li>
+          <li>30 days managed hosting</li>
+        </ul>
       </div>
-      <div class="hero-stage" aria-label="A collage of fictional special occasion samples">
+      <div
+        class="cinematic-stage"
+        aria-label="A cinematic selection of fictional occasion websites"
+      >
         {
-          occasions.slice(0, 4).map((occasion, index) => (
-            <a class={`stage-card stage-${index + 1}`} href={`/samples/${occasion.slug}`}>
+          heroOccasions.map((occasion, index) => (
+            <a class={`cinematic-frame frame-${index + 1}`} href={`/samples/${occasion.slug}`}>
               <img
-                src={occasion.heroImage}
-                alt=""
-                width="520"
-                height="650"
+                src={homeImage(occasion.slug, 800)}
+                srcset={homeSrcset(occasion.slug)}
+                sizes="(max-width: 680px) 82vw, (max-width: 980px) 70vw, 42vw"
+                alt={index === 0 ? occasion.heroAlt : ''}
+                width="760"
+                height="920"
                 loading={index === 0 ? 'eager' : 'lazy'}
                 fetchpriority={index === 0 ? 'high' : 'low'}
               />
-              <span>{occasion.category}</span>
+              <span>
+                <b>{String(index + 1).padStart(2, '0')}</b>
+                {occasion.category}
+              </span>
             </a>
+          ))
+        }
+        <p class="stage-caption"><span>12</span> complete guest and portal experiences</p>
+      </div>
+    </section>
+
+    <section class="occasion-intro" aria-labelledby="occasion-intro-title">
+      <p class="eyebrow">Made for the way the moment feels</p>
+      <h2 id="occasion-intro-title">What kind of moment are you creating?</h2>
+      <p>
+        Every occasion receives its own visual language, content structure, and guest experience—not
+        a recycled event-page template.
+      </p>
+      <div class="occasion-paths" aria-label="Occasion categories">
+        <a href="#occasions" data-occasion-jump="celebrate"
+          ><span>01</span><strong>Celebrate</strong><small
+            >Birthdays · anniversaries · graduations · retirements</small
+          ></a
+        >
+        <a href="#occasions" data-occasion-jump="gather"
+          ><span>02</span><strong>Gather</strong><small>Weddings · holidays · reunions</small></a
+        >
+        <a href="#occasions" data-occasion-jump="announce"
+          ><span>03</span><strong>Announce</strong><small
+            >Baby showers · new chapters · big news</small
+          ></a
+        >
+        <a href="#occasions" data-occasion-jump="remember"
+          ><span>04</span><strong>Remember</strong><small
+            >Memorials · funerals · lasting tributes</small
+          ></a
+        >
+      </div>
+    </section>
+
+    <section class="featured-experiences" aria-labelledby="featured-title">
+      <div class="section-heading">
+        <p class="eyebrow">Featured live experiences</p>
+        <h2 id="featured-title">See the feeling before you buy.</h2>
+        <p>
+          Open a complete guest experience, then step inside its matching client-portal preview.
+          Every example is live, responsive, and designed to show what your own site could become.
+        </p>
+      </div>
+      <div class="featured-grid">
+        {
+          featuredOccasions.map((occasion, index) => (
+            <article class={`featured-card featured-${index + 1}`}>
+              <a class="featured-image" href={`/samples/${occasion.slug}`}>
+                <img
+                  src={homeImage(occasion.slug, 800)}
+                  srcset={homeSrcset(occasion.slug)}
+                  sizes="(max-width: 980px) 100vw, 50vw"
+                  alt={occasion.heroAlt}
+                  width="1100"
+                  height="840"
+                  loading="lazy"
+                />
+                <span>
+                  {String(index + 1).padStart(2, '0')} · {occasion.category}
+                </span>
+              </a>
+              <div>
+                <p>{occasion.mood}</p>
+                <h3>{occasion.sampleName}</h3>
+                <p>{occasion.shortDescription}</p>
+                <nav aria-label={`${occasion.category} example actions`}>
+                  <a href={`/samples/${occasion.slug}`}>View the experience</a>
+                  <a href={`/samples/${occasion.slug}/admin-preview`}>Preview the portal</a>
+                  <a href={`${site.offerUrl}?occasion=${occasion.slug}`}>Start a site like this</a>
+                </nav>
+              </div>
+            </article>
           ))
         }
       </div>
@@ -48,11 +218,10 @@ import { site } from '../content/site';
 
     <section class="occasion-browser" id="occasions" aria-labelledby="occasion-heading">
       <div class="section-heading">
-        <p class="eyebrow">Twelve different stories</p>
-        <h2 id="occasion-heading">Find the shape of your moment.</h2>
+        <p class="eyebrow">The complete collection</p>
+        <h2 id="occasion-heading">Twelve stories. Twelve distinct directions.</h2>
         <p>
-          Each sample has its own structure, visual language, content, and tailored administration
-          preview.
+          Filter the collection, then open any guest site or its interactive client-portal preview.
         </p>
       </div>
       <div class="filters" role="group" aria-label="Filter occasions">
@@ -72,6 +241,7 @@ import { site } from '../content/site';
           >Announce</button
         >
       </div>
+      <p class="filter-result" data-filter-result aria-live="polite">Showing all 12 experiences.</p>
       <div class="occasion-grid">
         {
           occasions.map((occasion, index) => {
@@ -83,14 +253,16 @@ import { site } from '../content/site';
                   ? 'announce'
                   : 'celebrate';
             return (
-              <article class={`occasion-card card-${(index % 4) + 1}`} data-group={group}>
+              <article class="occasion-card" data-group={group}>
                 <a
                   class="card-image"
                   href={`/samples/${occasion.slug}`}
                   aria-label={`View ${occasion.category} guest experience`}
                 >
                   <img
-                    src={occasion.heroImage}
+                    src={homeImage(occasion.slug, 480)}
+                    srcset={homeSrcset(occasion.slug)}
+                    sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 33vw"
                     alt={occasion.heroAlt}
                     width="760"
                     height="620"
@@ -105,8 +277,9 @@ import { site } from '../content/site';
                   <h3>{occasion.sampleName}</h3>
                   <p>{occasion.shortDescription}</p>
                   <div class="card-actions">
-                    <a href={`/samples/${occasion.slug}`}>View Guest Experience</a>
-                    <a href={`/samples/${occasion.slug}/admin-preview`}>Preview Client Portal</a>
+                    <a href={`/samples/${occasion.slug}`}>Guest experience</a>
+                    <a href={`/samples/${occasion.slug}/admin-preview`}>Client portal</a>
+                    <a href={`${site.offerUrl}?occasion=${occasion.slug}`}>Start this type</a>
                   </div>
                 </div>
               </article>
@@ -116,50 +289,157 @@ import { site } from '../content/site';
       </div>
     </section>
 
-    <section class="two-sides" aria-labelledby="two-sides-title">
-      <div class="section-heading light">
+    <section class="experience-split" aria-labelledby="experience-split-title">
+      <div class="experience-photo">
+        <img
+          src={homeImage(featuredWedding.slug, 800)}
+          srcset={homeSrcset(featuredWedding.slug)}
+          sizes="(max-width: 980px) 100vw, 45vw"
+          alt=""
+          width="1000"
+          height="1100"
+          loading="lazy"
+        />
+        <div><span>Guest experience</span><strong>Beautiful, responsive, personal.</strong></div>
+      </div>
+      <div class="experience-copy">
         <p class="eyebrow">One website, two clear experiences</p>
-        <h2 id="two-sides-title">Beautiful for guests. Manageable for you.</h2>
+        <h2 id="experience-split-title">Beautiful for guests. Practical for you.</h2>
+        <p>
+          Share the story, photographs, schedule, directions, memories, or announcements in one
+          polished public place. Approved users receive protected access to manage the content and
+          media included in the project.
+        </p>
+        <div class="portal-window" aria-label="Illustration of the client portal">
+          <div class="portal-window-bar">
+            <span></span><span></span><span></span><b>GTP Client Portal</b>
+          </div>
+          <div class="portal-window-body">
+            <aside>
+              <strong>Overview</strong><span>Page content</span><span>Gallery</span><span
+                >Guest replies</span
+              >
+            </aside>
+            <div>
+              <small>Website health</small><strong>Ready to share</strong><div>
+                <span>6 photographs</span><span>4 sections live</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a class="button button-ghost-dark" href="/samples/weddings/admin-preview"
+          >Try an interactive portal</a
+        >
+        <p class="comparison-note">
+          Public portal previews are browser-only demonstrations. Customer administration is
+          protected for approved users.
+        </p>
       </div>
-      <div class="comparison">
-        <article>
-          <span aria-hidden="true">01</span><h3>What guests see</h3><p>
-            A thoughtful, responsive website with the story, details, photographs, resources, and
-            sharing tools appropriate to your occasion.
-          </p>
-        </article>
-        <article>
-          <span aria-hidden="true">02</span><h3>What you manage</h3><p>
-            A protected administration area configured for approved users, so content and media can
-            stay current without rebuilding the site.
-          </p>
-        </article>
-      </div>
-      <p class="comparison-note">
-        The public portal previews in this portfolio are local demonstrations. Real customer
-        administration is protected and configured for the customer’s approved users.
-      </p>
     </section>
 
-    <section class="offer-band">
+    <section class="process-section" id="process" aria-labelledby="process-title">
+      <div class="section-heading">
+        <p class="eyebrow">From idea to launch</p>
+        <h2 id="process-title">Three clear steps. One memorable result.</h2>
+      </div>
+      <ol>
+        <li>
+          <span>01</span><h3>Choose and purchase.</h3><p>
+            Select the occasion and secure the one-time starting package.
+          </p>
+        </li>
+        <li>
+          <span>02</span><h3>Share the story.</h3><p>
+            Provide approved photographs, details, wording, and your preferred domain.
+          </p>
+        </li>
+        <li>
+          <span>03</span><h3>Review and launch.</h3><p>
+            GTP designs, reviews, and launches the finished experience with you.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="offer-band" aria-labelledby="offer-title">
       <div>
-        <p class="eyebrow">A clear starting point</p>
-        <h2>{site.price} <small>{site.billing}</small></h2>
+        <p class="eyebrow">Everything needed to launch the moment</p>
+        <h2 id="offer-title">{site.price} <small>{site.billing}</small></h2>
+        <p class="no-subscription">One time. No subscription.</p>
         <ul>{site.inclusions.map((item) => <li>{item}</li>)}</ul>
+        <a class="button button-crimson" href={site.purchaseOptions[0].url}
+          >Start my site · {site.price}</a
+        >
       </div>
       <div class="offer-action">
-        <p>
-          Every site is customized around the people, purpose, and practical needs of the moment.
-        </p>
-        <a class="button" href={site.offerUrl}>Start your site</a>
-        <p class="checkout-note">
-          The complete offer and secure one-time checkout live on the Griffin Technology Partners
-          website.
-        </p>
-        <a class="text-link" href={site.offerUrl}>Review the complete offer</a><a
-          class="text-link"
-          href={`mailto:${site.salesEmail}`}>Or email {site.salesEmail}</a
+        <p>Keep it online for exactly as long as the moment needs.</p>
+        <div class="purchase-options">
+          {
+            site.purchaseOptions.slice(1).map((option) => (
+              <a class="purchase-option" href={option.url}>
+                <>
+                  <span>
+                    <>
+                      <strong>{option.name}</strong>
+                      <small>{option.detail}</small>
+                    </>
+                  </span>
+                  <b>{option.price}</b>
+                </>
+              </a>
+            ))
+          }
+        </div>
+        <a class="text-link" href={site.offerUrl}>Review the complete offer and terms</a>
+        <a class="text-link" href={`mailto:${site.salesEmail}`}
+          >Questions? Email {site.salesEmail}</a
         >
+      </div>
+    </section>
+
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div>
+        <p class="eyebrow">Before you begin</p>
+        <h2 id="faq-title">What buyers usually want to know.</h2>
+      </div>
+      <div class="faq-list">
+        {
+          faqItems.map((item, index) => (
+            <details open={index === 0}>
+              <summary>
+                {item.question}
+                <span aria-hidden="true">+</span>
+              </summary>
+              <p>{item.answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="closing-scene">
+      <img
+        src={homeImage('reunions', 1200)}
+        srcset={homeSrcset('reunions')}
+        sizes="100vw"
+        alt=""
+        width="1600"
+        height="900"
+        loading="lazy"
+      />
+      <div>
+        <p class="eyebrow">Your moment, beautifully shared</p>
+        <h2>Make it easy to visit—and hard to forget.</h2>
+        <p>
+          Choose the experience that feels closest to yours, then let Griffin Technology Partners
+          make it personal.
+        </p>
+        <div>
+          <a class="button button-crimson" href={site.purchaseOptions[0].url}
+            >Start yours · {site.price}</a
+          >
+          <a class="button button-ghost" href="#occasions">Explore all examples</a>
+        </div>
       </div>
     </section>
   </main>

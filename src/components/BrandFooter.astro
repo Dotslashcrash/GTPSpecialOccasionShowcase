@@ -3,14 +3,33 @@ import { site } from '../content/site';
 ---
 
 <footer class="brand-footer">
-  <div>
-    <strong>Griffin Technology Partners</strong>
-    <p>Custom websites for moments worth keeping.</p>
+  <div class="footer-brand">
+    <a
+      href="https://www.griffintechnologypartners.com/"
+      aria-label="Griffin Technology Partners main website"
+    >
+      <span aria-hidden="true"
+        ><img src="/brand/griffin-mark-160.webp" alt="" width="56" height="56" /></span
+      >
+      <span
+        ><strong>Griffin Technology Partners</strong><small
+          >Technology that works. Partnerships that last.</small
+        ></span
+      >
+    </a>
+    <p>Custom websites for moments worth keeping, backed by a real technology partner.</p>
   </div>
-  <div class="footer-links">
+  <div class="footer-column">
+    <strong>Explore</strong>
+    <a href="/#occasions">All occasions</a>
+    <a href="/#process">How it works</a>
     <a href="/about-the-demos">About these demos</a>
+  </div>
+  <div class="footer-column">
+    <strong>Start</strong>
+    <a href={site.offerUrl}>Review the complete offer</a>
+    <a href={site.purchaseOptions[0].url}>Secure one-time checkout</a>
     <a href={`mailto:${site.salesEmail}`}>{site.salesEmail}</a>
-    <a href={site.offerUrl}>View the current offer</a>
   </div>
   <p class="fine-print">Every person, event, message, and organization shown here is fictional.</p>
 </footer>

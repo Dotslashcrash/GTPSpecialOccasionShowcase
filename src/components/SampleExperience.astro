@@ -49,7 +49,12 @@ const nextOccasion = occasions[(currentIndex + 1) % occasions.length] ?? occasio
   class={`sample sample-${occasion.theme} layout-${occasion.layout}`}
   data-occasion={occasion.slug}
 >
-  <a class="sample-back" href="/">GTP portfolio <span aria-hidden="true">↗</span></a>
+  <a class="sample-back" href="/">
+    <span
+      ><img src="/brand/griffin-mark-160.webp" alt="" width="24" height="24" />GTP portfolio</span
+    >
+    <span>All occasions <span aria-hidden="true">↗</span></span>
+  </a>
   <header class="sample-nav">
     <a class="sample-monogram" href="#sample-top" aria-label={`${occasion.sampleName} home`}>
       <span aria-hidden="true">{occasion.sampleName.charAt(0)}</span>
@@ -371,7 +376,10 @@ const nextOccasion = occasions[(currentIndex + 1) % occasions.length] ?? occasio
     </section>
   </main>
   <footer class="sample-footer">
-    <p>This is a fictional portfolio example created by Griffin Technology Partners.</p>
+    <div class="sample-footer-brand">
+      <img src="/brand/griffin-mark-160.webp" alt="" width="38" height="38" />
+      <p>This is a fictional portfolio example created by Griffin Technology Partners.</p>
+    </div>
     <nav aria-label="Continue exploring">
       <a href={`/samples/${nextOccasion.slug}`}>Explore another occasion</a>
       <a href={`/samples/${occasion.slug}/admin-preview`}>Preview the client portal</a>

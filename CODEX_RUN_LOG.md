@@ -21,3 +21,13 @@
 - The first expanded Playwright run passed 37 checks, including every portal interaction, but 12 guest-route assertions counted the lightbox's inactive image along with the six gallery thumbnails. The assertion was narrowed to the visible gallery grid before rerunning the suite.
 - One announcement-gallery replacement download was interrupted by a remote transport reset. The other three completed; the interrupted asset was retried individually and then decoded successfully with the rest of the WebP gallery.
 - A post-domain resource-count query used the JMESPath expression `length(@)`, which Windows command parsing rejected after the preceding HTTPS checks had already succeeded. The exact resource list was immediately requested as JSON and counted in PowerShell, confirming one Free Static Web App and no additional resources.
+
+## 2026-08-24
+
+- The first in-app browser comparison attempted an unsupported viewport helper. No page state changed; the existing browser tabs were retained and the visual audit continued with the supported screenshot and semantic snapshot methods.
+- The first brand-asset copy command passed an unsupported `-LiteralPath` parameter to `New-Item`. No file was created by that command; it was rerun with an explicit `-Path`, then the exact Griffin mark and lockup assets copied successfully.
+- One combined patch tried to delete and add the homepage in the same patch operation, which the patch verifier rejected before changing files. The component edits and homepage replacement were applied as separate reviewed patches.
+- The first strict Astro check rejected possibly undefined featured-occasion array indexes, and the parallel format check observed the pre-fix homepage state. Featured occasions now use a fail-fast lookup with explicit named values before the checks are repeated.
+- The first expanded browser run passed 49 of 50 checks. The filter script correctly set `hidden`, but a later, more specific cinematic card rule overrode the browser's hidden rendering for two visible cards. Added an equally scoped hidden rule before rerunning the suite; no route, accessibility, portal, or checkout test failed.
+- The immediate targeted filter rerun still served the previous `dist` output because the emulator intentionally serves the last production build and the CSS-only fix had not been rebuilt. Rebuilt the static output before repeating browser validation.
+- The final local Lighthouse audit produced a complete report with 97 Performance and 100 Accessibility, Best Practices, and SEO, then Windows denied cleanup of Lighthouse's temporary directory with `EPERM`. The report itself was preserved and readable; this known cleanup-only failure did not affect the served site or the successful 50-test browser suite.

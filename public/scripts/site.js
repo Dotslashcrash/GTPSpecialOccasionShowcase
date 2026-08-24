@@ -9,18 +9,36 @@
 
   const filterButtons = document.querySelectorAll('[data-filter]');
   const occasionCards = document.querySelectorAll('[data-group]');
+  const filterResult = document.querySelector('[data-filter-result]');
+  const applyFilter = (button) => {
+    filterButtons.forEach((item) => {
+      item.classList.remove('active');
+      item.setAttribute('aria-pressed', 'false');
+    });
+    button.classList.add('active');
+    button.setAttribute('aria-pressed', 'true');
+    occasionCards.forEach((card) => {
+      card.hidden = button.dataset.filter !== 'all' && card.dataset.group !== button.dataset.filter;
+    });
+    if (filterResult) {
+      const visible = [...occasionCards].filter((card) => !card.hidden).length;
+      filterResult.textContent =
+        button.dataset.filter === 'all'
+          ? `Showing all ${visible} experiences.`
+          : `Showing ${visible} ${button.textContent.trim().toLowerCase()} experiences.`;
+    }
+  };
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      filterButtons.forEach((item) => {
-        item.classList.remove('active');
-        item.setAttribute('aria-pressed', 'false');
-      });
-      button.classList.add('active');
-      button.setAttribute('aria-pressed', 'true');
-      occasionCards.forEach((card) => {
-        card.hidden =
-          button.dataset.filter !== 'all' && card.dataset.group !== button.dataset.filter;
-      });
+      applyFilter(button);
+    });
+  });
+  document.querySelectorAll('[data-occasion-jump]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const target = [...filterButtons].find(
+        (button) => button.dataset.filter === link.dataset.occasionJump,
+      );
+      if (target) applyFilter(target);
     });
   });
 
