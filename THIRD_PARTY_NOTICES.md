@@ -51,7 +51,7 @@ The additional gallery photographs are stored locally and used under the [Pexels
 | `reunions-gallery-1.webp` through `reunions-gallery-4.webp`           | `3184183`, `755175`, `1154189`, `1181396`  |
 | `just-because-gallery-1.webp` through `just-because-gallery-4.webp`   | `1666816`, `1028725`, `846741`, `1128317`  |
 | `funerals-gallery-1.webp` through `funerals-gallery-4.webp`           | `731794`, `2381463`, `1173777`, `116909`   |
-| `announcements-gallery-1.webp` through `announcements-gallery-4.webp` | `1117132`, `144632`, `1458694`, `2255459`  |
+| `announcements-gallery-1.webp` through `announcements-gallery-4.webp` | `259588`, `106399`, `186077`, `276724`     |
 | `baby-showers-gallery-1.webp` through `baby-showers-gallery-4.webp`   | `1666067`, `3845456`, `1257110`, `54200`   |
 
 ## Project dependencies
